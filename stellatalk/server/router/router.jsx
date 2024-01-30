@@ -7,10 +7,10 @@ import MainContent from '../../src/components/layout/MainContent';
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<MainContent />}></Route>
-      <Route path="/chat" element={<ChatPage />}></Route>
-      <Route path="/post" element={<PostPage />}></Route>
-      <Route path="/universe" element={<UniversePage />}></Route>
+      <Route path="/" element={<MainContent />} />
+      <Route path="/chat" element={<ChatPage />} />
+      <Route path="/post" element={<PostPage />} />
+      <Route path="/universe" element={<UniversePage />} />
     </Routes>
   );
 };
