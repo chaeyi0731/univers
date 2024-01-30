@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url(../../assets/image/background.png);
+}
+.header {
+  width: 100vw;
+  height: 20vh;
+  background-color: #1b1a1a8a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fake {
+  width: 10vw;
+  height: 20vw;
+}
+.bgcimg {
+  width: 20vw;
+  height: 30vh;
+}
+
+.Info {
+  width: 10vw;
+  height: 20vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
