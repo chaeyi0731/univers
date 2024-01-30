@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../assets/image/stellachatlogo.png'; // 로고 이미지 경로로 변경하세요.
-import './header.css';
+import './layout.css';
 
 const Header = () => {
   return (
