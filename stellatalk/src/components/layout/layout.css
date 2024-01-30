@@ -61,4 +61,46 @@ body {
   height: 70vh;
   background-color: #1b1a1a8a;
   border-radius: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+}
+
+.chat > div {
+  width: 350px;
+  height: 350px;
+  background-size: cover;
+  background-position: center;
+  background-image: url('../../assets/image/chat.png');
+}
+.post > div {
+  width: 350px;
+  height: 350px;
+  background-size: cover;
+  background-position: center;
+  background-image: url('../../assets/image/post.png');
+}
+.universe > div {
+  width: 600px;
+  height: 600px;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  bottom: 20px;
+
+  background-image: url('../../assets/image/universe.png');
+}
+.mainp {
+  color: white;
+  font-weight: bold;
+  font-size: 3rem;
+}
+.mainnp {
+  color: white;
+  font-weight: bold;
+  font-size: 3rem;
+  position: absolute;
+  bottom: 80px;
 }
