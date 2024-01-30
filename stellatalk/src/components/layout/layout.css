@@ -7,7 +7,7 @@ body {
 }
 .header {
   width: 100vw;
-  height: 20vh;
+  height: 10vh;
   background-color: #1b1a1a8a;
   display: flex;
   justify-content: space-between;
@@ -31,9 +31,34 @@ body {
 }
 .footer {
   width: 100vw;
-  height: 20vh;
+  height: 10vh;
   display: flex;
   background-color: #1b1a1a8a;
   justify-content: end;
   align-items: center;
+}
+
+.main-content {
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 90vw;
+  height: 70vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chat,
+.post,
+.universe {
+  width: 25vw;
+  height: 70vh;
+  background-color: #1b1a1a8a;
+  border-radius: 5%;
 }
