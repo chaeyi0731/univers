@@ -10,15 +10,10 @@ export const UserProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await axios.post('/api/login', { username, password });
-      if (response.data.success) {
-        // 로그인 성공
-        setUser(response.data.user); // 사용자 정보를 상태에 저장
-      } else {
-        // 로그인 실패 처리
-        alert('로그인 실패');
-      }
+      return response; // 수정: 서버 응답을 반환
     } catch (error) {
       console.error('로그인 요청 실패', error);
+      throw error; // 수정: 에러를 다시 throw하여 호출 측에서 처리할 수 있도록 함
     }
   };
   const logout = async () => {
