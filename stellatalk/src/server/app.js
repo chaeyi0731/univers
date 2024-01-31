@@ -23,6 +23,24 @@ app.use(cors());
 const bcrypt = require('bcryptjs');
 app.use(express.json()); // JSON 본문 파싱을 위한 미들웨어
 
+//? 회원가입 API
+app.post('/signup', async (req, res) => {
+  const { username, password, name, phone_number, address } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10); // 비밀번호 해시 처리
+
+  const query = 'INSERT INTO Users (username, password, name, phone_number, address) VALUES (?, ?, ?, ?, ?)';
+  db.query(query, [username, hashedPassword, name, phone_number, address], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error during signup');
+    } else {
+      res.status(201).send('User registered successfully');
+    }
+  });
+});
+
+//? 로그인 API
+//  로그인시 Post로 데이터베이스와 대조를 함
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM User WHERE username = ?';
