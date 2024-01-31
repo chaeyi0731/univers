@@ -1,14 +1,14 @@
 import React from 'react';
 import './layout.css';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer>
       <div className="footer">
-        {/* a를 link to 로 바꾸어야함 */}
-        <a href="http://facebook.com">Facebook</a>
-        <a href="http://twitter.com">Twitter</a>
-        <a href="http://instagram.com">Instagram</a>
+        <Link to="http://facebook.com">Facebook</Link>
+        <Link to="http://twitter.com">Twitter</Link>
+        <Link to="http://instagram.com">Instagram</Link>
       </div>
     </footer>
   );
