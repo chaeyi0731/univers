@@ -29,7 +29,7 @@ const SignupPage = () => {
 
     try {
       // 백엔드로 회원가입 요청
-      await axios.post('/signup', userInfo);
+      await axios.post('http://localhost:5001/signup', userInfo);
       alert('회원가입이 완료되었습니다.');
       // 회원가입 성공 후 홈 페이지로 리다이렉션
       window.location.href = '/';
