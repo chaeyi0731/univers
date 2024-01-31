@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../content/UserContext'; // 경로 수정
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const LoginPage = () => {
 
   const handleLoginClick = async () => {
     try {
-      const response = await login(username, password);
+      const response = await axios.post('http://localhost:5001/api/login', { username, password });
       if (response && response.data && response.data.success) {
         navigate('/'); // 로그인 성공 시 메인 페이지로 이동
       } else {
