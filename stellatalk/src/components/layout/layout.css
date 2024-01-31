@@ -129,3 +129,71 @@ body {
   width: 300px;
   height: 300px;
 }
+
+.login-widgets {
+  width: 50vw;
+  height: 75vh;
+  border-radius: 10%;
+  background-color: #1b1a1a8a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-top {
+  width: 50vw;
+  height: 35vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.login-top > h1 {
+  font-size: 5rem;
+}
+.login-bottom {
+  width: 50vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-input {
+  width: 30vw;
+  height: 8vh;
+  background-color: #d9d9d98f;
+  font-size: 2rem;
+}
+
+.fined {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.login-btn {
+  margin-top: 10px;
+  width: 50vw;
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button,
+.signup-button {
+  width: 30vw;
+  height: 10vh;
+  margin-top: 30px;
+}
+.login-button {
+  background-color: rgba(0, 0, 0, 0.809);
+  color: #ffffff;
+}
+.signup-button {
+  background-color: #ffffffe6;
+}
