@@ -13,8 +13,8 @@ const Header = () => {
         <img className="bgcimg" src={logo} alt="StellaChat Logo" onClick={() => handleClick('/')} />
 
         <div className="Info">
-          <button>Login</button>
-          <button>Sign Up</button>
+          <button onClick={() => handleClick('/login')}>Login</button>
+          <button onClick={() => handleClick('/signup')}>Sign Up</button>
         </div>
       </div>
     </header>
