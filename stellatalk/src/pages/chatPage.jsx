@@ -1,7 +1,7 @@
 const ChatPage = () => {
   return (
-    <div>
-      <h1>chat페이지</h1>
+    <div class="main-content">
+      <div className="widgets"></div>
     </div>
   );
 };
