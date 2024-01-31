@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const bcrypt = require('bcryptjs');
 const mysql = require('mysql');
 const cors = require('cors');
 
@@ -33,25 +32,27 @@ app.post('/signup', async (req, res) => {
   });
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM Users WHERE username = ?';
 
-  db.query(query, [username], async (err, result) => {
+  const query = 'SELECT * FROM Users WHERE username = ?';
+  db.query(query, [username], async (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).send('Server error');
-    } else if (result.length === 0) {
-      res.status(404).send('User not found');
-    } else {
-      const user = result[0];
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      return res.status(500).send('서버 오류');
+    }
 
-      if (passwordMatch) {
-        res.json({ success: true, user: { name: user.name, username: user.username } });
-      } else {
-        res.status(401).send('Incorrect password');
-      }
+    if (results.length === 0) {
+      return res.status(404).send('사용자를 찾을 수 없습니다.');
+    }
+
+    // 데이터베이스에서 찾은 사용자
+    const user = results[0];
+
+    // 비밀번호 비교
+    const isMatch = await (password, user.password);
+    if (!isMatch) {
+      return res.status(401).send('비밀번호가 일치하지 않습니다.');
     }
   });
 });
