@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000; // 포트 변경 가능
 const { TranslationServiceClient } = require('@google-cloud/translate').v3;
 const translationClient = new TranslationServiceClient();
 
