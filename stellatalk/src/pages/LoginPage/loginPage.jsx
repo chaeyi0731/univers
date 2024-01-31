@@ -1,4 +1,8 @@
+import React, { useContext } from 'react';
+import { UserContext } from '..//../content/UserContext';
+
 const LoginPage = () => {
+  const { login } = useContext(UserContext);
   return (
     <div className="main-content">
       <div className="login-widgets">
