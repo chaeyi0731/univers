@@ -54,6 +54,9 @@ app.post('/api/login', (req, res) => {
     if (!isMatch) {
       return res.status(401).send('비밀번호가 일치하지 않습니다.');
     }
+
+    // 로그인 성공 시 사용자 정보 반환
+    res.send({ success: true, user });
   });
 });
 
