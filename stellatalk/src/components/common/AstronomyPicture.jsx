@@ -26,22 +26,23 @@ const AstronomyPicture = () => {
 
   useEffect(() => {
     if (apod && apod.explanation) {
-      const translateApiUrl = `http://localhost:5000/translate`; // 예시 API 엔드포인트
+      // 서버의 번역 엔드포인트 호출
+      const translateApiUrl = `http://localhost:5001/translate`;
       const params = new URLSearchParams({
         text: apod.explanation,
-        lang: 'ko'
+        lang: 'ko',
       });
-  
-      axios.get(`${translateApiUrl}?${params.toString()}`)
+
+      axios
+        .get(`${translateApiUrl}?${params.toString()}`)
         .then((response) => {
-          setTranslatedExplanation(response.data.translatedText);
+          setTranslatedExplanation(response.data); // 수정된 부분: 서버 응답 구조에 맞게 접근
         })
         .catch((error) => {
           console.error('Error fetching the translation:', error);
         });
     }
   }, [apod]);
-
   const handleDateChange = (event) => {
     setDateInput(event.target.value);
   };
@@ -57,7 +58,7 @@ const AstronomyPicture = () => {
           {apod.url ? <img className="nasaimg" src={apod.url} alt={apod.title || 'No Title'} /> : <p>No Image Available</p>}
         </div>
       ) : (
-        <p>Loading APOD data or No Data Available for this Date</p>
+        <p>날짜를 변경해주세요 해당일에는 정보가 없습니다.</p>
       )}
     </div>
   );
