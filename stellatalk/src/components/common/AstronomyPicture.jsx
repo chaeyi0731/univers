@@ -3,8 +3,8 @@ import axios from 'axios';
 
 const AstronomyPicture = () => {
   const [apod, setApod] = useState(null);
+  const [translatedExplanation, setTranslatedExplanation] = useState('');
   const [dateInput, setDateInput] = useState(() => {
-    // 현재 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
     const today = new Date();
     const date = today.toISOString().split('T')[0];
     return date;
@@ -24,6 +24,20 @@ const AstronomyPicture = () => {
       });
   }, [dateInput]);
 
+  useEffect(() => {
+    if (apod && apod.explanation) {
+      const translateApiUrl = `http://localhost:5000/universe`; // 서버의 번역 API 엔드포인트
+      axios
+        .get(`${translateApiUrl}?text=${encodeURIComponent(apod.explanation)}&lang=ko`)
+        .then((response) => {
+          setTranslatedExplanation(response.data.translatedText);
+        })
+        .catch((error) => {
+          console.error('Error fetching the translation: ', error);
+        });
+    }
+  }, [apod]);
+
   const handleDateChange = (event) => {
     setDateInput(event.target.value);
   };
@@ -31,12 +45,15 @@ const AstronomyPicture = () => {
   return (
     <div>
       <input type="date" id="datepicker" value={dateInput} onChange={handleDateChange} />
-      {apod && (
+      {apod ? (
         <div>
-          <h1>{apod.title}</h1>
-          <p>{apod.explanation}</p>
-          <img className="nasaimg" src={apod.url} alt={apod.title} />
+          <h1>{apod.title || 'No Title Available'}</h1>
+          <p>{apod.explanation || 'No Explanation Available'}</p>
+          <p>Translated Explanation: {translatedExplanation || 'No Translation Available'}</p>
+          {apod.url ? <img className="nasaimg" src={apod.url} alt={apod.title || 'No Title'} /> : <p>No Image Available</p>}
         </div>
+      ) : (
+        <p>Loading APOD data or No Data Available for this Date</p>
       )}
     </div>
   );
