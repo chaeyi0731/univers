@@ -1,5 +1,5 @@
 // src/context/UserContext.js
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const UserContext = createContext(null);
@@ -10,12 +10,22 @@ export const UserProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await axios.post('/api/login', { username, password });
-      return response; // 수정: 서버 응답을 반환
+      if (response.data.success) {
+        setUser(response.data.user); // 로그인 성공 시 사용자 정보 저장
+        console.log(user);
+      }
+      return response;
     } catch (error) {
       console.error('로그인 요청 실패', error);
-      throw error; // 수정: 에러를 다시 throw하여 호출 측에서 처리할 수 있도록 함
+      throw error;
     }
   };
+  useEffect(() => {
+    console.log(user); // 상태 업데이트 확인
+  }, [user]);
+
+  console.log(user);
+
   const logout = async () => {
     try {
       await axios.post('/api/logout');
