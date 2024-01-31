@@ -26,14 +26,18 @@ const AstronomyPicture = () => {
 
   useEffect(() => {
     if (apod && apod.explanation) {
-      const translateApiUrl = `http://localhost:5000/universe`; // 서버의 번역 API 엔드포인트
-      axios
-        .get(`${translateApiUrl}?text=${encodeURIComponent(apod.explanation)}&lang=ko`)
+      const translateApiUrl = `http://localhost:5000/translate`; // 예시 API 엔드포인트
+      const params = new URLSearchParams({
+        text: apod.explanation,
+        lang: 'ko'
+      });
+  
+      axios.get(`${translateApiUrl}?${params.toString()}`)
         .then((response) => {
           setTranslatedExplanation(response.data.translatedText);
         })
         .catch((error) => {
-          console.error('Error fetching the translation: ', error);
+          console.error('Error fetching the translation:', error);
         });
     }
   }, [apod]);
