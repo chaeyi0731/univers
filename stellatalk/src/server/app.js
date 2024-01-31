@@ -3,45 +3,46 @@ const app = express();
 const PORT = process.env.PORT || 5001; // 포트 변경 가능
 // const axios = require('axios');
 
+//! db 설정
+const mysql = require('mysql');
+const db = mysql.createConnection({
+  host: 'stellatalk.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
+  user: 'admin',
+  password: 'zico920914',
+  database: 'stellatalk',
+});
+
+db.connect((err) => {
+  if (err) throw err;
+  console.log('MySQL connected');
+});
+
 const cors = require('cors');
 app.use(cors());
 
+const bcrypt = require('bcryptjs');
+app.use(express.json()); // JSON 본문 파싱을 위한 미들웨어
 
-//? 번역 api 문제로 인해 주석 처리
-// const subscriptionKey = 'ae664ba92c324d5ba399188a33bf7bbe';
-// const endpoint = 'https://api.cognitive.microsofttranslator.com';
-// const location = 'stella-talk';
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM User WHERE username = ?';
 
-// app.get('/translate', async (req, res) => {
-//   const { text, lang } = req.query; // 클라이언트로부터 받은 텍스트와 목표 언어
+  db.query(query, [username], async (err, result) => {
+    if (err) throw err;
+    if (result.length === 0) {
+      return res.status(404).send('User not found');
+    }
 
-//   axios({
-//     baseURL: endpoint,
-//     url: '/translate',
-//     method: 'post',
-//     headers: {
-//       'Ocp-Apim-Subscription-Key': subscriptionKey,
-//       'Ocp-Apim-Subscription-Region': location,
-//       'Content-Type': 'application/json',
-//     },
-//     params: {
-//       'api-version': '3.0',
-//       to: [lang],
-//     },
-//     data: [
-//       {
-//         text: text,
-//       },
-//     ],
-//   })
-//     .then((response) => {
-//       res.json(response.data[0].translations[0].text);
-//     })
-//     .catch((error) => {
-//       console.error('Error during translation:', error);
-//       res.status(500).send('Translation error');
-//     });
-// });
+    const user = result[0];
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      res.json({ success: true, user: { name: user.name, username: user.username } });
+    } else {
+      res.status(401).send('Incorrect password');
+    }
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
