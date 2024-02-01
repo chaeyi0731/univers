@@ -63,6 +63,12 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+app.post('/api/logout', (req, res) => {
+  // 세션 또는 토큰 기반 인증을 사용하는 경우 여기에서 처리
+
+  // 로그아웃 성공 응답 보내기
+  res.send({ success: true, message: 'Successfully logged out' });
+});
 //? 채팅 관련 API
 
 const server = http.createServer(app);
@@ -86,7 +92,7 @@ io.on('connection', (socket) => {
 
     // 데이터베이스에 메시지 저장
     const query = 'INSERT INTO chatMessage (user_id, message) VALUES (?, ?)';
-    db.query(query, [msg.userId, msg.text, msg.timestamp], (err, result) => {
+    db.query(query, [msg.userId, msg.message, msg.timestamp], (err, result) => {
       if (err) {
         console.error('메시지 저장 중 오류 발생:', err);
         return;
