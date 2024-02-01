@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../content/UserContext';
 import '../components/layout/layout.css';
 
 const ChatPage = () => {
+  const { user } = useContext(UserContext);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
@@ -10,10 +12,15 @@ const ChatPage = () => {
   };
 
   const handleSendClick = () => {
-    // 새 메시지를 messages 배열에 추가
-    setMessages([...messages, message]);
+    // 새 메시지 객체를 messages 배열에 추가
+    const newMessage = {
+      text: message,
+      userName: user ? user.name : '익명',
+    };
+    setMessages([...messages, newMessage]);
     setMessage(''); // 입력 필드 초기화
   };
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -21,7 +28,10 @@ const ChatPage = () => {
       </div>
       <div className="chat-messages">
         {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
+          <div key={index}>
+            <strong>{msg.userName}: </strong>
+            {msg.text}
+          </div>
         ))}
       </div>
       <div className="chat-input">
