@@ -24,10 +24,10 @@ body {
 }
 
 .Info {
-  width: 10vw;
+  width: 15vw;
   height: 20vw;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
