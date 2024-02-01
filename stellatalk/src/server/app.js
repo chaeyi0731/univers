@@ -111,5 +111,3 @@ app.get('/api/chat', (req, res) => {
 server.listen(5001, () => {
   console.log('서버가 5001번 포트에서 실행중입니다.');
 });
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
