@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../content/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
+import io from 'socket.io-client';
+const socket = io('http://localhost:5001');
 
 const ChatPage = () => {
   const { user } = useContext(UserContext);
@@ -21,13 +23,14 @@ const ChatPage = () => {
   };
 
   const handleSendClick = () => {
-    // 새 메시지 객체를 messages 배열에 추가
     const newMessage = {
+      userId: user.name, // 사용자 ID
       text: message,
-      userName: user ? user.name : '익명',
+      timestamp: new Date().toISOString(),
     };
+    socket.emit('chat message', newMessage);
     setMessages([...messages, newMessage]);
-    setMessage(''); // 입력 필드 초기화
+    setMessage('');
   };
 
   return (
