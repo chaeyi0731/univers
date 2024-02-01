@@ -23,11 +23,17 @@ const ChatPage = () => {
   };
 
   const handleSendClick = () => {
+    if (!user || !user.username) {
+      console.error('로그인한 사용자만 메시지를 보낼 수 있습니다.');
+      return;
+    }
+
     const newMessage = {
-      userId: user.name, // 사용자 ID
+      userName: user.name, // 사용자의 이름
       text: message,
       timestamp: new Date().toISOString(),
     };
+  
     socket.emit('chat message', newMessage);
     setMessages([...messages, newMessage]);
     setMessage('');
