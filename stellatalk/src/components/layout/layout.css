@@ -12,6 +12,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #ffffff;
 }
 .fake {
   width: 10vw;
