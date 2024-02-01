@@ -1,3 +1,4 @@
+// src/components/layout/Header.jsx
 import './layout.css';
 import React, { useContext } from 'react';
 import { UserContext } from '../../content/UserContext';
