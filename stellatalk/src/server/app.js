@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
     console.log('클라이언트가 연결을 끊었습니다:', socket.id);
   });
 });
+
 io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     // 모든 클라이언트에 메시지 전송
@@ -92,7 +93,7 @@ io.on('connection', (socket) => {
 
     // 데이터베이스에 메시지 저장
     const query = 'INSERT INTO chatMessage (user_id, message) VALUES (?, ?)';
-    db.query(query, [msg.userId, msg.message, msg.timestamp], (err, result) => {
+    db.query(query, [msg.userId, msg.text], (err, result) => {
       if (err) {
         console.error('메시지 저장 중 오류 발생:', err);
         return;
