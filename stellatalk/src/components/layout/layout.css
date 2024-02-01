@@ -230,25 +230,6 @@ body {
   font-size: 1rem;
 }
 /* chat 관련 스타일링 */
-.chat-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-header {
-  background-color: #4e5d94;
-  color: white;
-  padding: 15px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  text-align: center;
-}
 
 .chat-messages {
   flex: 1;
@@ -257,6 +238,7 @@ body {
 }
 
 .chat-input {
+  width: 60vw;
   display: flex;
   padding: 10px;
 }
@@ -271,8 +253,8 @@ body {
 
 .chat-input button {
   padding: 10px 20px;
-  background-color: #5cb85c;
-  color: white;
+  background-color: powderblue;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
