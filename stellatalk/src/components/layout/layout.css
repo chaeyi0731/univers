@@ -78,6 +78,7 @@ body {
   align-items: center;
   position: relative;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .chat > div {
