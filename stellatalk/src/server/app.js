@@ -72,7 +72,14 @@ app.post('/api/logout', (req, res) => {
 //? 채팅 관련 API
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:3000', // 클라이언트의 주소
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
+  },
+});
 
 io.on('connection', (socket) => {
   console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
@@ -92,8 +99,8 @@ io.on('connection', (socket) => {
     io.emit('chat message', msg);
 
     // 데이터베이스에 메시지 저장
-    const query = 'INSERT INTO chatMessage (user_id, message) VALUES (?, ?)';
-    db.query(query, [msg.userId, msg.text], (err, result) => {
+    const query = 'INSERT INTO chatMessage (userName, message, timestamp) VALUES (?, ?, ?)';
+    db.query(query, [msg.userName, msg.text, msg.timestamp], (err, result) => {
       if (err) {
         console.error('메시지 저장 중 오류 발생:', err);
         return;
