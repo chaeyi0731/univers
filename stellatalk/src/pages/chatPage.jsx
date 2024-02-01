@@ -1,11 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../content/UserContext';
+import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
 
 const ChatPage = () => {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    // 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (e) => {
     setMessage(e.target.value);
