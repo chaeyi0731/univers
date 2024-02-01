@@ -1,26 +1,23 @@
 import React from 'react';
 import './layout.css';
+import { Link } from 'react-router-dom'; // 추가
 
 function MainContent() {
-  const handleClick = (path) => {
-    window.location.href = path;
-  };
-
   return (
     <main className="main-content">
       <div className="content">
-        <div className="chat" onClick={() => handleClick('/chat')}>
+        <Link to="/chat" className="chat">
           <div></div>
           <p className="mainp">CHAT</p>
-        </div>
-        <div className="post" onClick={() => handleClick('/post')}>
+        </Link>
+        <Link to="/post" className="post">
           <div></div>
           <p className="mainp">POST</p>
-        </div>
-        <div className="universe" onClick={() => handleClick('/universe')}>
+        </Link>
+        <Link to="/universe" className="universe">
           <div></div>
           <p className="mainnp">UNIVERSE</p>
-        </div>
+        </Link>
       </div>
     </main>
   );
