@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
+const http = require('http');
+const socketIo = require('socket.io');
 
 app.use(cors());
 app.use(express.json());
@@ -61,5 +63,53 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+//? 채팅 관련 API
+
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
+
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('클라이언트가 연결을 끊었습니다:', socket.id);
+  });
+});
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    // 모든 클라이언트에 메시지 전송
+    io.emit('chat message', msg);
+
+    // 데이터베이스에 메시지 저장
+    const query = 'INSERT INTO chatMessage (user_id, message) VALUES (?, ?)';
+    db.query(query, [msg.userId, msg.text], (err, result) => {
+      if (err) {
+        console.error('메시지 저장 중 오류 발생:', err);
+        return;
+      }
+      console.log('메시지가 데이터베이스에 저장되었습니다:', result.insertId);
+    });
+  });
+});
+
+app.get('/api/chat', (req, res) => {
+  const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('메시지 로딩 중 오류 발생:', err);
+      res.status(500).send('서버 오류');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+server.listen(5001, () => {
+  console.log('서버가 5001번 포트에서 실행중입니다.');
+});
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
