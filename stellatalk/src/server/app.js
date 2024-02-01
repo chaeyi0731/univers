@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
 
     // 데이터베이스에 메시지 저장
     const query = 'INSERT INTO chatMessage (user_id, message) VALUES (?, ?)';
-    db.query(query, [msg.userId, msg.text], (err, result) => {
+    db.query(query, [msg.userId, msg.text, msg.timestamp], (err, result) => {
       if (err) {
         console.error('메시지 저장 중 오류 발생:', err);
         return;
