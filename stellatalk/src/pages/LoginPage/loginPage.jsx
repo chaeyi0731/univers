@@ -11,13 +11,8 @@ const LoginPage = () => {
 
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post('http://localhost:5001/api/login', { username, password });
-      if (response && response.data && response.data.success) {
-        alert('로그인 되었습니다');
-        navigate('/'); // 로그인 성공 시 메인 페이지로 이동
-      } else {
-        alert('로그인 실패');
-      }
+      await login(username, password);
+      navigate('/'); // 로그인 성공 시 메인 페이지로 이동
     } catch (error) {
       console.error('로그인 요청 실패', error);
       alert('로그인 요청 실패');
