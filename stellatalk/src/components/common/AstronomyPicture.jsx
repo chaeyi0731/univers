@@ -34,7 +34,7 @@ const AstronomyPicture = () => {
       {apod ? (
         <div>
           <h1>{apod.title || 'No Title Available'}</h1>
-          <p>{apod.explanation || 'No Explanation Available'}</p>
+          <p class="universep">{apod.explanation || 'No Explanation Available'}</p>
           {apod.url ? <img className="nasaimg" src={apod.url} alt={apod.title || 'No Title'} /> : <p>No Image Available</p>}
         </div>
       ) : (
