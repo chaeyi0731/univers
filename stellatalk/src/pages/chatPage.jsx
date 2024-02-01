@@ -22,21 +22,20 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <h1>StellaChat</h1>
-      </div>
-      <div className="chat-messages">
-        {messages.map((msg, index) => (
-          <div key={index}>
-            <strong>{msg.userName}: </strong>
-            {msg.text}
-          </div>
-        ))}
-      </div>
-      <div className="chat-input">
-        <input type="text" placeholder="메시지 입력..." value={message} onChange={handleInputChange} />
-        <button onClick={handleSendClick}>전송</button>
+    <div className="main-content">
+      <div className="widgets">
+        <div className="chat-messages">
+          {messages.map((msg, index) => (
+            <div key={index}>
+              <strong>{msg.userName}: </strong>
+              {msg.text}
+            </div>
+          ))}
+        </div>
+        <div className="chat-input">
+          <input type="text" placeholder="메시지 입력..." value={message} onChange={handleInputChange} />
+          <button onClick={handleSendClick}>전송</button>
+        </div>
       </div>
     </div>
   );
