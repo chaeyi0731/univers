@@ -2,7 +2,6 @@ import './layout.css';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../content/UserContext';
-import logo from '../../assets/image/stellachatlogo.png'; // 로고 이미지 경로로 변경하세요.
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
@@ -12,7 +11,7 @@ const Header = () => {
       <div className="header">
         <div className="fake"></div>
         <Link to="/">
-          <img className="bgcimg" src={logo} alt="StellaChat Logo" />
+          <img className="bgcimg" src={'https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/stellachatlogo.png'} alt="StellaChat Logo" />
         </Link>
 
         <div className="Info">
