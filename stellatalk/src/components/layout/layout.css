@@ -3,7 +3,7 @@
   padding: 0;
 }
 body {
-  background-image: url(../../assets/image/background.png);
+  background-image: url('https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/background.png');
 }
 .header {
   width: 100vw;
@@ -86,14 +86,14 @@ body {
   height: 350px;
   background-size: cover;
   background-position: center;
-  background-image: url('../../assets/image/chat.png');
+  background-image: url('https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/chat.png');
 }
 .post > div {
   width: 350px;
   height: 350px;
   background-size: cover;
   background-position: center;
-  background-image: url('../../assets/image/post.png');
+  background-image: url('https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/post.png');
 }
 .universe > div {
   width: 600px;
@@ -103,7 +103,7 @@ body {
   position: absolute;
   bottom: 20px;
 
-  background-image: url('../../assets/image/universe.png');
+  background-image: url('https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/universe.png');
 }
 .mainp {
   color: white;
