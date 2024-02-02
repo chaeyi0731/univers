@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/UserContext';
+import React, { useEffect, useState, useContext } from 'react'; // useContext 훅 추가
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../content/UserContext'; // 경로 확인 필요
 import '../components/layout/layout.css';
 
 const PostPage = () => {
   const [titles, setTitles] = useState([]);
-  const { user } = useUser();
   const navigate = useNavigate();
+
+  // useContext를 사용하여 UserContext의 값을 가져옵니다.
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     // 사용자가 로그인하지 않은 경우 로그인 페이지로 리다이렉션
@@ -17,7 +18,8 @@ const PostPage = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    fetch('/get')
+    // 게시글 목록을 불러오는 API 요청
+    fetch('/posts')
       .then((response) => response.json())
       .then((data) => setTitles(data));
   }, []);
