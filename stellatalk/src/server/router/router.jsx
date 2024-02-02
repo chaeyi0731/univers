@@ -5,6 +5,7 @@ import UniversePage from '../../pages/universePage';
 import MainContent from '../../components/layout/MainContent';
 import LoginPage from '../../pages/LoginPage/loginPage';
 import SignupPage from '../../pages/SignupPage/signupPage';
+import CreatePostPage from '../../pages/postPage/CreatePostPage';
 
 const Router = () => {
   return (
@@ -17,6 +18,8 @@ const Router = () => {
       <Route path="/chat" element={<ChatPage />} />
       <Route path="/post" element={<PostPage />} />
       <Route path="/universe" element={<UniversePage />} />
+      {/* 게시글 작성 라우트 */}
+      <Route path="/create-post" element={<CreatePostPage />} />
     </Routes>
   );
 };
