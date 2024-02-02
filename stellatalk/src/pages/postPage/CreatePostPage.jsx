@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate;
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState('');
@@ -24,17 +26,17 @@ const CreatePostPage = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('image', image);
+    formData.append('image', image); // 이미지 파일 추가
 
     try {
-      const response = await fetch('/posts', {
+      const response = await fetch('http://localhost:5001/create-post', {
         method: 'POST',
-        body: formData,
+        body: formData, // multipart/form-data는 headers 설정 없이 보내야 브라우저가 자동으로 처리합니다.
       });
 
       const data = await response.json();
       console.log(data);
-      navigator('/post');
+      navigate('/post');
     } catch (error) {
       console.error('게시글 생성 중 에러 발생:', error);
     }
