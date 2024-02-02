@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PostPage = () => {
   const [titles, setTitles] = useState([]);
@@ -17,6 +18,9 @@ const PostPage = () => {
           {titles.map((title, index) => (
             <h2 key={index}>{title}</h2>
           ))}
+          <Link to="/create-post">
+            <button>게시글 작성</button>
+          </Link>
         </div>
       </div>
     </div>
