@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 const CreatePostPage = () => {
   const [title, setTitle] = useState('');
@@ -17,9 +18,26 @@ const CreatePostPage = () => {
     setImage(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 여기서 서버에 POST 요청을 보내고, 이미지는 S3에 업로드합니다.
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('image', image);
+
+    try {
+      const response = await fetch('/posts', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log(data);
+      navigator('/post');
+    } catch (error) {
+      console.error('게시글 생성 중 에러 발생:', error);
+    }
   };
 
   return (
