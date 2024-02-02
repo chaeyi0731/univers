@@ -259,3 +259,14 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* post 스타일링 */
+.postwidgets {
+  width: 90vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  overflow-y: auto;
+}
