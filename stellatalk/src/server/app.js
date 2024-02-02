@@ -127,6 +127,19 @@ app.get('/api/chat', (req, res) => {
 
 //? 게시판 게시글 관련 API
 
+// 게시글 제목 목록을 불러오는 GET 엔드포인트
+app.get('/get', (req, res) => {
+  const query = 'SELECT title FROM Posts'; // 게시글 제목을 가져오는 쿼리 (테이블 이름과 컬럼 이름 확인 필요)
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Server error');
+    } else {
+      res.json(results.map((result) => result.title)); // 각 게시글의 제목만 배열로 반환
+    }
+  });
+});
+
 // AWS S3 설정
 AWS.config.update({
   accessKeyId: 'AKIA6L5TGMGL4ZJRSI6X', // AWS IAM 사용자의 액세스 키 ID
