@@ -5,6 +5,9 @@ const mysql = require('mysql');
 const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
+const AWS = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 
 app.use(cors());
 app.use(express.json());
@@ -124,12 +127,40 @@ app.get('/api/chat', (req, res) => {
 
 //? 게시판 게시글 관련 API
 
+// AWS S3 설정
+AWS.config.update({
+  accessKeyId: 'AKIA6L5TGMGL4ZJRSI6X', // AWS IAM 사용자의 액세스 키 ID
+  secretAccessKey: '76UaS8mk5tO5i/b3Vek+lea2rndFEXFrIJvixUQO', // AWS IAM 사용자의 시크릿 액세스 키
+  region: 'ap-northeast-2', // 서울
+});
+
+const s3 = new AWS.S3();
+
+// multer를 사용한 파일 업로드 설정
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'stllatalk', // S3 버킷 이름
+    acl: 'public-read', // 업로드된 파일의 ACL(접근 권한)
+    key: function (request, file, cb) {
+      // 'image/' 폴더 내에 파일 저장
+      const filename = `${Date.now().toString()}-${file.originalname}`;
+      const fullPath = `image/${filename}`; // 'image' 폴더 안에 파일 저장
+      cb(null, fullPath);
+    },
+  }),
+}).single('image');
+
 app.post('/create-post', (req, res) => {
-  const { title, content, user_id } = req.body;
-  const sql = 'INSERT INTO Posts (title, content, user_id) VALUES (?, ?, ?)';
-  db.query(sql, [title, content, user_id], (err, result) => {
-    if (err) throw err;
-    res.send('게시글이 성공적으로 작성되었습니다.');
+  const { title, content, user_id, image_url } = req.body;
+  const sql = 'INSERT INTO Posts (title, content, user_id, image_url) VALUES (?, ?, ?, ?)';
+  db.query(sql, [title, content, user_id, image_url], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('서버 에러가 발생했습니다.');
+    } else {
+      res.send('게시글이 성공적으로 작성되었습니다.');
+    }
   });
 });
 
