@@ -122,6 +122,17 @@ app.get('/api/chat', (req, res) => {
   });
 });
 
+//? 게시판 게시글 관련 API
+
+app.post('/create-post', (req, res) => {
+  const { title, content, user_id } = req.body;
+  const sql = 'INSERT INTO Posts (title, content, user_id) VALUES (?, ?, ?)';
+  db.query(sql, [title, content, user_id], (err, result) => {
+    if (err) throw err;
+    res.send('게시글이 성공적으로 작성되었습니다.');
+  });
+});
+
 server.listen(5001, () => {
   console.log('서버가 5001번 포트에서 실행중입니다.');
 });
