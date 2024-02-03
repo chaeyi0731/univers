@@ -20,8 +20,11 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-  if (err) throw err;
-  console.log('MySQL connected');
+  if (err) {
+    console.error('연결 에러:', err);
+    return;
+  }
+  console.log('MySQL에 연결됨');
 });
 
 app.post('/signup', async (req, res) => {
