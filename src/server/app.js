@@ -13,15 +13,18 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'stellatalk.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
+  host: 'univsers.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
   user: 'admin',
   password: 'zico920914',
-  database: 'stellatalk',
+  database: 'univsers',
 });
 
 db.connect((err) => {
-  if (err) throw err;
-  console.log('MySQL connected');
+  if (err) {
+    console.error('연결 에러:', err);
+    return;
+  }
+  console.log('MySQL에 연결됨');
 });
 
 app.post('/signup', async (req, res) => {
