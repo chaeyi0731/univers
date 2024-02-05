@@ -75,6 +75,7 @@ app.post('/api/logout', (req, res) => {
   // 로그아웃 성공 응답 보내기
   res.send({ success: true, message: 'Successfully logged out' });
 });
+
 //? 채팅 관련 API
 
 const server = http.createServer(app);
@@ -156,28 +157,31 @@ const s3 = new AWS.S3();
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'stllatalk', // S3 버킷 이름
-    acl: 'public-read', // 업로드된 파일의 ACL(접근 권한)
-    key: function (request, file, cb) {
-      // 'image/' 폴더 내에 파일 저장
-      const filename = `${Date.now().toString()}-${file.originalname}`;
-      const fullPath = `image/${filename}`; // 'image' 폴더 안에 파일 저장
-      cb(null, fullPath);
+    bucket: 'stellatalk',
+    acl: 'public-read',
+    key: function (req, file, cb) {
+      cb(null, `${Date.now().toString()}-${file.originalname}`);
     },
   }),
-}).single('image');
+});
 
-app.post('/create-post', (req, res) => {
-  const { title, content, user_id, image_url } = req.body;
-  const sql = 'INSERT INTO Posts (title, content, user_id, image_url) VALUES (?, ?, ?, ?)';
-  db.query(sql, [title, content, user_id, image_url], (err, result) => {
+app.post('/create-post', upload.single('image'), (req, res) => {
+  const { title, content, user_id } = req.body;
+  const image_url = req.file ? req.file.location : null; // S3에서 반환된 파일 URL
+
+  const query = 'INSERT INTO Posts (user_id, title, content, image_url, timestamp) VALUES (?, ?, ?, ?, NOW())';
+  db.query(query, [user_id, title, content, image_url], (err, result) => {
     if (err) {
       console.error(err);
-      res.status(500).send('서버 에러가 발생했습니다.');
-    } else {
-      res.send('게시글이 성공적으로 작성되었습니다.');
+      return res.status(500).send('Server error');
     }
+    res.send({ message: 'Post created successfully', postId: result.insertId });
   });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 server.listen(5001, () => {
