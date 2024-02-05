@@ -13,10 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'stellatalk.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
+  host: 'univsers.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
   user: 'admin',
   password: 'zico920914',
-  database: 'stellatalk',
+  database: 'univsers',
 });
 
 db.connect((err) => {
