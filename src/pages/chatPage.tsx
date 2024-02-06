@@ -1,24 +1,36 @@
+// ChatPage.tsx
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../content/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
 import io from 'socket.io-client';
+
+interface User {
+  username: string;
+  name: string;
+}
+
+interface Message {
+  userName: string;
+  text: string;
+  timestamp: string;
+}
+
 const socket = io('http://localhost:3001');
 
-const ChatPage = () => {
-  const { user } = useContext(UserContext);
+const ChatPage: React.FC = () => {
+  const { user } = useContext(UserContext) as { user: User };
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState<string>('');
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    // 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
@@ -28,14 +40,14 @@ const ChatPage = () => {
       return;
     }
 
-    const newMessage = {
-      userName: user.name, // 사용자의 이름
+    const newMessage: Message = {
+      userName: user.name,
       text: message,
       timestamp: new Date().toISOString(),
     };
 
     socket.emit('chat message', newMessage);
-    setMessages([...messages, newMessage]);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
     setMessage('');
   };
 
