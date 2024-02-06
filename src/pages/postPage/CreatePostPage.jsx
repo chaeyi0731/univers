@@ -42,23 +42,25 @@ const CreatePostPage = () => {
   };
 
   return (
-    <div className="widgets">
-      <form onSubmit={handleSubmit}>
-        <label>
-          제목:
-          <input type="text" value={title} onChange={handleTitleChange} />
-        </label>
-        <label>
-          내용:
-          <textarea value={content} onChange={handleContentChange} />
-        </label>
-        <label>
-          이미지 첨부:
-          <input type="file" name="image" onChange={handleImageUpload} />
-        </label>{' '}
-        {/* 'name' 속성 추가됨 */}
-        <button type="submit">게시글 작성</button>
-      </form>
+    <div className="main-content">
+      <div className="widgets">
+        <form onSubmit={handleSubmit}>
+          <label>
+            제목:
+            <input type="text" value={title} onChange={handleTitleChange} />
+          </label>
+          <label>
+            내용:
+            <textarea value={content} onChange={handleContentChange} />
+          </label>
+          <label>
+            이미지 첨부:
+            <input type="file" name="image" onChange={handleImageUpload} />
+          </label>{' '}
+          {/* 'name' 속성 추가됨 */}
+          <button type="submit">게시글 작성</button>
+        </form>
+      </div>
     </div>
   );
 };
