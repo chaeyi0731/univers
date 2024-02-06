@@ -8,15 +8,16 @@ const socketIo = require('socket.io');
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'univsers.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
-  user: 'admin',
-  password: 'zico920914',
-  database: 'univsers',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD, // 수정됨
+  database: process.env.DB_DATABASE, // 수정됨
 });
 
 db.connect((err) => {
@@ -146,9 +147,9 @@ app.get('/get', (req, res) => {
 
 // AWS S3 설정
 AWS.config.update({
-  accessKeyId: 'AKIA6L5TGMGL4ZJRSI6X', // AWS IAM 사용자의 액세스 키 ID
-  secretAccessKey: '76UaS8mk5tO5i/b3Vek+lea2rndFEXFrIJvixUQO', // AWS IAM 사용자의 시크릿 액세스 키
-  region: 'ap-northeast-2', // 서울
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
 
 const s3 = new AWS.S3();
