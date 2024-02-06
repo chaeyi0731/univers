@@ -1,24 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react'; // useContext 훅 추가
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../content/UserContext'; // 경로 확인 필요
+import { UserContext } from '../content/UserContext';
 import '../components/layout/layout.css';
 
-const PostPage = () => {
-  const [titles, setTitles] = useState([]);
+const PostPage: React.FC = () => {
+  const [titles, setTitles] = useState<string[]>([]); // titles의 타입을 명시
   const navigate = useNavigate();
-
-  // useContext를 사용하여 UserContext의 값을 가져옵니다.
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    // 사용자가 로그인하지 않은 경우 로그인 페이지로 리다이렉션
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    // 게시글 목록을 불러오는 API 요청
     fetch('/posts')
       .then((response) => response.json())
       .then((data) => setTitles(data));
