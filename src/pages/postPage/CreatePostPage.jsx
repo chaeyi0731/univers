@@ -19,10 +19,20 @@ const CreatePostPage = () => {
     formData.append('image', image); // 'name' 속성이 'image'인 파일
 
     try {
+      // fetch 함수 호출 시 await 사용
       const response = await fetch(`${process.env.REACT_APP_API_URL}/create-post`, {
         method: 'POST',
-        body: formData, // headers 설정 생략
+        body: formData,
+        // 추가할 수 있는 headers 설정
+        headers: {
+          Accept: 'application/json',
+          // 'Content-Type': 'multipart/form-data'는 multipart/form-data의 경우 자동으로 설정됩니다.
+          // 따라서 이 header는 명시적으로 설정하지 않아도 됩니다.
+        },
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`); // 서버 응답이 OK가 아닌 경우 에러 처리
+      }
       const data = await response.json();
       console.log(data);
       navigate('/post'); // 함수 호출 방식으로 수정됨
