@@ -1,41 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CreatePostPage = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
-  const navigate = useNavigate(); // 수정됨
+const CreatePostPage: React.FC = () => {
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [image, setImage] = useState<File | null>(null);
+  const navigate = useNavigate();
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
-  const handleContentChange = (e) => setContent(e.target.value);
-  const handleImageUpload = (e) => setImage(e.target.files[0]);
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!image) {
+      alert('이미지를 첨부해주세요.');
+      return;
+    }
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('image', image); // 'name' 속성이 'image'인 파일
+    formData.append('image', image);
 
     try {
-      // fetch 함수 호출 시 await 사용
       const response = await fetch(`${process.env.REACT_APP_API_URL}/create-post`, {
         method: 'POST',
         body: formData,
-        // 추가할 수 있는 headers 설정
-        headers: {
-          Accept: 'application/json',
-          // 'Content-Type': 'multipart/form-data'는 multipart/form-data의 경우 자동으로 설정됩니다.
-          // 따라서 이 header는 명시적으로 설정하지 않아도 됩니다.
-        },
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`); // 서버 응답이 OK가 아닌 경우 에러 처리
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       console.log(data);
-      navigate('/post'); // 함수 호출 방식으로 수정됨
+      navigate('/post');
     } catch (error) {
       console.error('게시글 생성 중 에러 발생:', error);
     }
@@ -56,8 +57,7 @@ const CreatePostPage = () => {
           <label>
             이미지 첨부:
             <input type="file" name="image" onChange={handleImageUpload} />
-          </label>{' '}
-          {/* 'name' 속성 추가됨 */}
+          </label>
           <button type="submit">게시글 작성</button>
         </form>
       </div>
