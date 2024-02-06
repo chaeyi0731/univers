@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ChatPage from '../../pages/chatPage';
 import PostPage from '../../pages/postPage';
@@ -7,7 +8,7 @@ import LoginPage from '../../pages/LoginPage/loginPage';
 import SignupPage from '../../pages/SignupPage/signupPage';
 import CreatePostPage from '../../pages/postPage/CreatePostPage';
 
-const Router = () => {
+const Router: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<MainContent />} />
