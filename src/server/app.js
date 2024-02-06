@@ -80,7 +80,8 @@ app.post('/api/logout', (req, res) => {
 //? 채팅 관련 API
 
 const server = http.createServer(app);
-const io = socketIo(server, {
+
+const io = require('socket.io')(server, {
   cors: {
     origin: 'http://localhost:3000', // 클라이언트의 주소
     methods: ['GET', 'POST'],
@@ -170,6 +171,9 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body;
   const image_url = req.file ? req.file.location : null; // S3에서 반환된 파일 URL
 
+  console.log(req.body);
+  console.log(req.file);
+
   const query = 'INSERT INTO Posts (user_id, title, content, image_url, timestamp) VALUES (?, ?, ?, ?, NOW())';
   db.query(query, [user_id, title, content, image_url], (err, result) => {
     if (err) {
@@ -180,7 +184,12 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+app.use((error, req, res, next) => {
+  console.error(error); // 에러 로깅
+  res.status(500).send({ error: 'Something went wrong' });
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
