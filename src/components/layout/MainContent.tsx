@@ -1,8 +1,8 @@
 import React from 'react';
 import './layout.css';
-import { Link } from 'react-router-dom'; // 추가
+import { Link } from 'react-router-dom';
 
-function MainContent() {
+const MainContent: React.FC = () => {
   return (
     <main className="main-content">
       <div className="content">
@@ -21,6 +21,6 @@ function MainContent() {
       </div>
     </main>
   );
-}
+};
 
 export default MainContent;
