@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post('http://localhost:5001/api/login', { username, password });
+      const response = await axios.post('http://localhost:3001/api/login', { username, password });
       if (response.data.success) {
         setUser(response.data.user); // 사용자 정보 저장
       } else {
@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:5001/api/logout');
+      await axios.post('http://localhost:3001/api/logout');
       setUser(null); // 사용자 상태 초기화
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
