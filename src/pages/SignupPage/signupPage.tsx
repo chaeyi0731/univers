@@ -1,8 +1,17 @@
+// SignupPage.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SignupPage = () => {
-  const [userInfo, setUserInfo] = useState({
+interface UserInfo {
+  username: string;
+  password: string;
+  name: string;
+  phoneNumber: string;
+  address: string;
+}
+
+const SignupPage: React.FC = () => {
+  const [userInfo, setUserInfo] = useState<UserInfo>({
     username: '',
     password: '',
     name: '',
@@ -10,31 +19,27 @@ const SignupPage = () => {
     address: '',
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
+    setUserInfo((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // 폼 제출 시 페이지 리로드 방지
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    // 모든 필드가 채워져 있는지 검사
     if (!userInfo.username || !userInfo.password || !userInfo.name || !userInfo.phoneNumber || !userInfo.address) {
       alert('모든 필드를 채워주세요.');
       return;
     }
 
     try {
-      // 백엔드로 회원가입 요청
       await axios.post('http://localhost:5001/signup', userInfo);
       alert('회원가입이 완료되었습니다.');
-      // 회원가입 성공 후 홈 페이지로 리다이렉션
       window.location.href = '/';
     } catch (error) {
-      // 오류 처리
       alert(error.response.data.message || '회원가입 중 오류가 발생했습니다.');
     }
   };
