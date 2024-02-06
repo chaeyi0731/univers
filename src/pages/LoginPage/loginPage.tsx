@@ -1,14 +1,16 @@
-// src/pages/LoginPage/loginPage.jsx
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../../content/UserContext'; // 경로 수정
 import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import { UserContext } from '../../content/UserContext'; // 경로는 실제 구조에 맞게 조정하세요
 
-const LoginPage = () => {
+interface LoginContextType {
+  login: (username: string, password: string) => Promise<void>;
+}
+
+const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useContext(UserContext);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { login } = useContext(UserContext) as LoginContextType;
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const handleLoginClick = async () => {
     try {
