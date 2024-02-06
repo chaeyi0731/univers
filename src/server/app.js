@@ -5,12 +5,6 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const socketIo = require('socket.io')(server, {
-  cors: {
-    origin: '*', // 모든 출처 허용으로 변경 또는 필요에 따라 조정
-    methods: ['GET', 'POST'],
-  },
-});
 const cors = require('cors');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
