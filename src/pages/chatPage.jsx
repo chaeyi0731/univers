@@ -3,7 +3,7 @@ import { UserContext } from '../content/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
 import io from 'socket.io-client';
-const socket = io('http://localhost:5001');
+const socket = io('http://localhost:3001');
 
 const ChatPage = () => {
   const { user } = useContext(UserContext);
@@ -33,7 +33,7 @@ const ChatPage = () => {
       text: message,
       timestamp: new Date().toISOString(),
     };
-  
+
     socket.emit('chat message', newMessage);
     setMessages([...messages, newMessage]);
     setMessage('');
