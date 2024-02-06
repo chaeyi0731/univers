@@ -1,8 +1,9 @@
+// MainContent.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './layout.css';
 
-function MainContent() {
+const MainContent: React.FC = () => {
   return (
     <main className="main-content">
       <div className="content">
@@ -21,6 +22,6 @@ function MainContent() {
       </div>
     </main>
   );
-}
+};
 
 export default MainContent;
