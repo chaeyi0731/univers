@@ -12,9 +12,11 @@ interface User {
 
 interface UserContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<void>; // login 함수 타입 추가
+  login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
+
+const initialUser: User | null = null; // 초기 user 상태를 null로 설정
 
 export const UserContext = createContext<UserContextType | null>(null);
 
@@ -23,14 +25,14 @@ interface UserProviderProps {
 }
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(initialUser);
   const navigate = useNavigate();
 
   const login = async (username: string, password: string) => {
     try {
       const response = await axios.post('http://localhost:3001/api/login', { username, password });
       if (response.data.success) {
-        setUser(response.data.user); // 사용자 정보 저장
+        setUser(response.data.user);
       } else {
         alert('로그인 실패');
       }
@@ -42,7 +44,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post('http://localhost:3001/api/logout');
-      setUser(null); // 사용자 상태 초기화
+      setUser(null); // 로그아웃 시 user 상태를 초기화
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
       console.error('로그아웃 요청 실패', error);
