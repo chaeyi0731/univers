@@ -11,7 +11,7 @@
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.54",
     "@types/react-dom": "^18.2.18",
-    "aws-sdk": "^2.1550.0",
+    "aws-sdk": "^2.1552.0",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -31,7 +31,7 @@
     "s3": "^2.0.0",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
-    "typescript": "^5.3.3",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "yarn": "^1.22.21"
   },
@@ -58,5 +58,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   }
 }
