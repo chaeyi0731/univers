@@ -26,7 +26,7 @@ const CreatePostPage: React.FC = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch(`http://43.203.209.74:3001/create-post`, {
+      const response = await fetch(`http://localhost:3000/create-post`, {
         method: 'POST',
         body: formData,
       });
