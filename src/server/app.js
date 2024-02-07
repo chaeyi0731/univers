@@ -11,8 +11,10 @@ const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const mysql = require('mysql');
 const multer = require('multer');
-const { LightSail } = require('aws-sdk');
+const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
+
+const upload = multer({ dest: 'uploads/' });
 
 // CORS 설정
 app.use(cors());
@@ -136,23 +138,19 @@ app.get('/api/chat', (req, res) => {
 
 //? 게시판 게시글 관련 API
 
-// LightSail 설정
-const lightsail = new LightSail({
-  accessKeyId: 'your_access_key_id',
-  secretAccessKey: 'your_secret_access_key',
-  region: 'your_region',
+const lightsail = new AWS.Lightsail({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
-
-// Multer 설정
-const upload = multer({ dest: 'uploads/' });
 
 // 게시글 생성 엔드포인트
 app.post('/create-post', upload.single('image'), (req, res) => {
-  const { title, content, user_id } = req.body;
+  const { title, content } = req.body;
   const image = req.file;
 
   // 이미지 스토리지에 업로드
-  const bucketName = 'your_bucket_name';
+  const bucketName = 'stella-talk1';
   const objectKey = `${uuidv4()}-${image.originalname}`;
 
   const params = {
@@ -170,8 +168,8 @@ app.post('/create-post', upload.single('image'), (req, res) => {
     const imageUrl = data.location;
 
     // 게시글 데이터베이스에 저장
-    const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
-    db.query(query, [title, content, imageUrl, user_id], (error, results) => {
+    const query = 'INSERT INTO Posts (title, content, image_url, timestamp) VALUES (?, ?, ?, NOW())';
+    db.query(query, [title, content, imageUrl], (error, results) => {
       if (error) {
         console.error('게시글 삽입 중 에러:', error);
         return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
