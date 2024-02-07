@@ -176,28 +176,27 @@ app.post('/upload-image', upload, (req, res) => {
   return res.status(200).json({ imageUrl });
 });
 
-app.post('/create-post', upload.single('image'), (req, res) => {
-  // req.body에서 게시글 정보를 추출합니다.
-  const { title, content, user_id } = req.body;
+app.post('/create-post', upload.single('image'), async (req, res) => {
+  try {
+    const { title, content, user_id } = req.body;
+    const image_url = req.file ? req.file.location : null; // multer-s3를 사용하여 이미지의 URL을 바로 얻을 수 있습니다.
+    const timestamp = new Date(); // 현재 시간 생성
 
-  // 이미지 파일이 업로드 되었다면, S3에서 반환된 파일의 URL을 사용합니다.
-  // 업로드된 파일이 없다면, image_url은 null이 됩니다.
-  const image_url = req.file ? req.file.location : null;
-
-  // 게시글 정보와 이미지 URL(있는 경우)을 데이터베이스에 저장합니다.
-  const query = `
-    INSERT INTO Posts (user_id, title, content, image_url, timestamp) 
-    VALUES (?, ?, ?, ?, NOW())
-  `;
-
-  db.query(query, [user_id, title, content, image_url], (err, result) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).send('Server error');
-    }
-    // 성공적으로 게시글이 생성되었을 때의 응답입니다.
-    res.send({ message: 'Post created successfully', postId: result.insertId });
-  });
+    const query = `
+      INSERT INTO Posts (user_id, title, content, image_url, timestamp) 
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    db.query(query, [user_id, title, content, image_url, timestamp], (err, result) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send('Server error');
+      }
+      res.send({ message: 'Post created successfully', postId: result.insertId });
+    });
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 app.use((error, req, res, next) => {
