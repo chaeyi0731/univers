@@ -11,6 +11,9 @@ const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const mysql = require('mysql');
+const multer = require('multer');
+const { LightSail } = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -176,6 +179,53 @@ ORDER BY Posts.timestamp DESC;
 
   `;
 
+// LightSail 설정
+const lightsail = new LightSail({
+  accessKeyId: 'your_access_key_id',
+  secretAccessKey: 'your_secret_access_key',
+  region: 'your_region',
+});
+
+// Multer 설정
+const upload = multer({ dest: 'uploads/' });
+
+// 게시글 생성 엔드포인트
+app.post('/create-post', upload.single('image'), (req, res) => {
+  const { title, content, user_id } = req.body;
+  const image = req.file;
+
+  // 이미지 스토리지에 업로드
+  const bucketName = 'your_bucket_name';
+  const objectKey = `${uuidv4()}-${image.originalname}`;
+
+  const params = {
+    bucketName: bucketName,
+    localFilePath: image.path,
+    key: objectKey,
+  };
+
+  lightsail.uploadBundle(params, (err, data) => {
+    if (err) {
+      console.error('스토리지 업로드 에러:', err);
+      return res.status(500).send('이미지 업로드 중에 오류가 발생했습니다.');
+    }
+
+    const imageUrl = data.location;
+
+    // 게시글 데이터베이스에 저장
+    const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
+    db.query(query, [title, content, imageUrl, user_id], (error, results) => {
+      if (error) {
+        console.error('게시글 삽입 중 에러:', error);
+        return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
+      }
+      res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.' });
+    });
+  });
+});
+
+app.get('/get', (req, res) => {
+  const query = 'SELECT title FROM Posts'; // 게시글 제목을 가져오는 쿼리 (테이블 이름과 컬럼 이름 확인 필요)
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
