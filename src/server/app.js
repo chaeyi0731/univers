@@ -6,10 +6,10 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
-const mysql = require('mysql');
 const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
+const mysql = require('mysql');
+const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
 AWS.config.update({
@@ -179,6 +179,33 @@ ORDER BY Posts.timestamp DESC;
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
+      res.status(500).send('Server error');
+    } else {
+      res.json(results.map((result) => result.title)); // 각 게시글의 제목만 배열로 반환
+    }
+  });
+});
+
+
+
+
+app.post('/create-post', upload.single('image'), (req, res) => {
+  // req.body에서 게시글 정보를 추출합니다.
+  const { title, content, user_id } = req.body;
+
+  // 이미지 파일이 업로드 되었다면, S3에서 반환된 파일의 URL을 사용합니다.
+  // 업로드된 파일이 없다면, image_url은 null이 됩니다.
+  const image_url = req.file ? req.file.location : null;
+
+  // 게시글 정보와 이미지 URL(있는 경우)을 데이터베이스에 저장합니다.
+  const query = `
+    INSERT INTO Posts (user_id, title, content, image_url, timestamp) 
+    VALUES (?, ?, ?, ?, NOW())
+  `;
+
+  db.query(query, [user_id, title, content, image_url], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
       return res.status(500).send('Server error');
     }
 
