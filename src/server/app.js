@@ -147,24 +147,33 @@ app.get('/get', (req, res) => {
 });
 
 // AWS S3 설정
-AWS.config.update({
+const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
-const s3 = new AWS.S3();
-
-// multer를 사용한 파일 업로드 설정
+/// Multer-S3를 사용하여 이미지 업로드 설정
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'stellatalk',
-    acl: 'public-read',
+    bucket: process.env.S3_BUCKET_NAME,
     key: function (req, file, cb) {
-      cb(null, `${Date.now().toString()}-${file.originalname}`);
+      cb(null, `${Date.now()}_${file.originalname}`);
     },
+    acl: 'public-read',
   }),
+}).single('image');
+
+// 이미지 업로드 및 URL 생성 라우트
+app.post('/upload-image', upload, (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: '이미지를 업로드해주세요.' });
+  }
+
+  // 업로드된 이미지 URL 반환
+  const imageUrl = req.file.location;
+  return res.status(200).json({ imageUrl });
 });
 
 app.post('/create-post', upload.single('image'), (req, res) => {
