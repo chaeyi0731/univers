@@ -27,10 +27,11 @@ const CreatePostPage: React.FC = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/create-post`, {
+      const response = await fetch(`http://localhost:3000/create-post`, {
         method: 'POST',
         body: formData,
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
