@@ -44,7 +44,11 @@ const CreatePostPage: React.FC = () => {
 >>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:3001/create-post`, {
+=======
+      const response = await fetch(`http://localhost:3000/create-post`, {
+>>>>>>> f209917 (:hammer: Modify: 경로 이름 변경)
         method: 'POST',
         body: formData,
       });
