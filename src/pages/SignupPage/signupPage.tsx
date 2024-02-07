@@ -1,4 +1,3 @@
-// SignupPage.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -40,7 +39,7 @@ const SignupPage: React.FC = () => {
       alert('회원가입이 완료되었습니다.');
       window.location.href = '/';
     } catch (error) {
-      alert(error.response.data.message || '회원가입 중 오류가 발생했습니다.');
+      alert(error.response?.data?.message || '회원가입 중 오류가 발생했습니다.');
     }
   };
 
