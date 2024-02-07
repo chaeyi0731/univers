@@ -7,7 +7,6 @@ const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
 const multer = require('multer');
-const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const mysql = require('mysql');
 
@@ -147,24 +146,42 @@ app.get('/get', (req, res) => {
 });
 
 // AWS S3 설정
-AWS.config.update({
+const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
-const s3 = new AWS.S3();
-
-// multer를 사용한 파일 업로드 설정
+// Multer를 사용하여 이미지 업로드 설정
 const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: 'stellatalk',
-    acl: 'public-read',
-    key: function (req, file, cb) {
-      cb(null, `${Date.now().toString()}-${file.originalname}`);
-    },
-  }),
+  storage: multer.memoryStorage(),
+}).single('image');
+
+// 이미지 업로드 및 URL 생성 라우트
+app.post('/upload-image', upload, (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: '이미지를 업로드해주세요.' });
+  }
+
+  // S3에 이미지 업로드
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `${Date.now()}_${req.file.originalname}`,
+    Body: req.file.buffer,
+    ContentType: req.file.mimetype,
+    ACL: 'public-read',
+  };
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.error('S3 업로드 실패:', err);
+      return res.status(500).json({ message: '이미지 업로드 중 오류가 발생했습니다.' });
+    }
+
+    // 업로드된 이미지 URL 반환
+    const imageUrl = data.Location;
+    return res.status(200).json({ imageUrl });
+  });
 });
 
 app.post('/create-post', upload.single('image'), (req, res) => {
