@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../hooks/UserContext';
+import { UserContext } from '../../hooks/UserContext'; // 사용자 컨텍스트를 가져옴
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
+  const userContext = useContext(UserContext); // 사용자 컨텍스트를 가져옴
+  const user = userContext ? userContext.user : null; // 사용자가 null인 경우 처리
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
@@ -29,10 +30,13 @@ const CreatePostPage: React.FC = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    if (image) {
-      formData.append('image', image); // 이미지가 있을 때만 추가
+    formData.append('image', image);
+    
+    if (user && user.user_id) {
+      formData.append('user_id', String(user.user_id));
+    } else {
+      formData.append('user_id', ''); // 또는 다른 기본값으로 설정
     }
-    formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
 
     try {
       const response = await fetch('http://43.203.209.74:3001/create-post', {
