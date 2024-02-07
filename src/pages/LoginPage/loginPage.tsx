@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../content/UserContext'; // 경로는 실제 구조에 맞게 조정하세요
+import { UserContext } from '../../hooks/UserContext';
 
 interface LoginContextType {
   login: (username: string, password: string) => Promise<void>;
