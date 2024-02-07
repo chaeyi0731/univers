@@ -7,6 +7,7 @@ const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const mysql = require('mysql');
 const { v4: uuidv4 } = require('uuid');
@@ -186,8 +187,26 @@ ORDER BY Posts.timestamp DESC;
   });
 });
 
+// AWS S3 설정
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
 
+const s3 = new AWS.S3();
 
+// multer를 사용한 파일 업로드 설정
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'stellatalk',
+    acl: 'public-read',
+    key: function (req, file, cb) {
+      cb(null, `${Date.now().toString()}-${file.originalname}`);
+    },
+  }),
+});
 
 app.post('/create-post', upload.single('image'), (req, res) => {
   // req.body에서 게시글 정보를 추출합니다.
