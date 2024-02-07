@@ -1,6 +1,6 @@
 // ChatPage.tsx
 import React, { useState, useContext, useEffect } from 'react';
-import { UserContext } from '../content/UserContext';
+import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
 import io from 'socket.io-client';
