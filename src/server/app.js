@@ -6,9 +6,6 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
-const AWS = require('aws-sdk');
 const mysql = require('mysql');
 
 // CORS 설정
@@ -133,7 +130,6 @@ app.get('/api/chat', (req, res) => {
 
 //? 게시판 게시글 관련 API
 
-// 게시글 제목 목록을 불러오는 GET 엔드포인트
 app.get('/get', (req, res) => {
   const query = 'SELECT title FROM Posts'; // 게시글 제목을 가져오는 쿼리 (테이블 이름과 컬럼 이름 확인 필요)
   db.query(query, (err, results) => {
@@ -144,59 +140,6 @@ app.get('/get', (req, res) => {
       res.json(results.map((result) => result.title)); // 각 게시글의 제목만 배열로 반환
     }
   });
-});
-
-// AWS S3 설정
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
-/// Multer-S3를 사용하여 이미지 업로드 설정
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: process.env.S3_BUCKET_NAME,
-    key: function (req, file, cb) {
-      cb(null, `${Date.now()}_${file.originalname}`);
-    },
-    acl: 'public-read',
-  }),
-}).single('image');
-
-// 이미지 업로드 및 URL 생성 라우트
-app.post('/upload-image', upload, (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: '이미지를 업로드해주세요.' });
-  }
-
-  // 업로드된 이미지 URL 반환
-  const imageUrl = req.file.location;
-  return res.status(200).json({ imageUrl });
-});
-
-app.post('/create-post', upload.single('image'), async (req, res) => {
-  try {
-    const { title, content, user_id } = req.body;
-    const image_url = req.file ? req.file.location : null; // multer-s3를 사용하여 이미지의 URL을 바로 얻을 수 있습니다.
-    const timestamp = new Date(); // 현재 시간 생성
-
-    const query = `
-      INSERT INTO Posts (user_id, title, content, image_url, timestamp) 
-      VALUES (?, ?, ?, ?, ?)
-    `;
-    db.query(query, [user_id, title, content, image_url, timestamp], (err, result) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).send('Server error');
-      }
-      res.send({ message: 'Post created successfully', postId: result.insertId });
-    });
-  } catch (error) {
-    console.error('Error creating post:', error);
-    res.status(500).send('Server error');
-  }
 });
 
 app.use((error, req, res, next) => {
