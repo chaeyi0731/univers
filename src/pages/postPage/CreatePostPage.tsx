@@ -1,16 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { UserContext } from '../../hooks/UserContext';
+=======
+>>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
+<<<<<<< HEAD
   const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
+=======
+>>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -28,10 +34,14 @@ const CreatePostPage: React.FC = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
+<<<<<<< HEAD
     if (image) {
       formData.append('image', image); // 이미지가 있을 때만 추가
     }
     formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
+=======
+    formData.append('image', image);
+>>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
 
     try {
       const response = await fetch(`http://localhost:3001/create-post`, {
