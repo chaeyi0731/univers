@@ -1,13 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../hooks/UserContext'; // 사용자 컨텍스트를 가져옴
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
@@ -26,12 +24,6 @@ const CreatePostPage: React.FC = () => {
     formData.append('title', title);
     formData.append('content', content);
     formData.append('image', image);
-    
-    if (user && user.user_id) {
-      formData.append('user_id', String(user.user_id));
-    } else {
-      formData.append('user_id', ''); // 또는 다른 기본값으로 설정
-    }
 
     try {
       const response = await fetch(`http://43.203.209.74:3001/create-post`, {
