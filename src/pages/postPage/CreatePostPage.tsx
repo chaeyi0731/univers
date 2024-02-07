@@ -29,11 +29,7 @@ const CreatePostPage: React.FC = () => {
     formData.append('content', content);
     formData.append('image', image);
 
-    if (user && user.user_id) {
-      formData.append('user_id', String(user.user_id));
-    } else {
-      formData.append('user_id', ''); // 또는 다른 기본값으로 설정
-    }
+    formData.append('user_id', String(user?.user_id) || '');
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/create-post`, {
