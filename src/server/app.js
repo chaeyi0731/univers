@@ -11,6 +11,7 @@ const AWS = require('aws-sdk');
 const mysql = require('mysql');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { exec } = require('child_process');
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -144,14 +145,24 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   // 이미지가 첨부되었을 경우에만 처리
   if (req.file) {
     const image = req.file;
-    // 이미지 URL 생성
-    const imagePath = `/${image.filename}`; // 예시: /uploads/filename.jpg
-    imageUrl = `${req.protocol}://${req.get('host')}${imagePath}`;
+    // 이미지를 라이트세일 인스턴스에 업로드하고 업로드된 파일의 URL을 얻어오는 함수 호출
+    uploadToLightsail(image, (err, url) => {
+      if (err) {
+        console.error('Error uploading image to Lightsail:', err);
+        res.status(500).send('Failed to upload image to Lightsail');
+        return;
+      }
+      imageUrl = url; // 업로드된 파일의 URL 설정
+      // 이미지 URL을 포함하여 게시글 삽입 함수 호출
+      insertPost(title, content, imageUrl, user_id, res);
+    });
+  } else {
+    // 이미지가 첨부되지 않은 경우 바로 게시글 삽입
+    insertPost(title, content, imageUrl, user_id, res);
   }
-
-  insertPost(title, content, imageUrl, user_id, res);
 });
 
+// 게시글을 데이터베이스에 삽입하는 함수
 function insertPost(title, content, imageUrl, user_id, res) {
   // 이미지 URL이 빈 경우를 처리하기 위해 imageUrl의 기본값을 설정합니다.
   imageUrl = imageUrl || '';
@@ -163,6 +174,25 @@ function insertPost(title, content, imageUrl, user_id, res) {
       return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
     }
     res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.', imageUrl });
+  });
+}
+
+// 라이트세일 인스턴스에 파일 업로드하고 업로드된 파일의 URL을 반환하는 함수
+function uploadToLightsail(image, callback) {
+  // 파일 이름을 유니크하게 생성
+  const filename = `${uuidv4()}-${image.originalname}`;
+
+  // AWS CLI를 사용하여 파일을 라이트세일 인스턴스에 업로드
+  const command = `aws lightsail push-container-image --region <ap-northeast-2> --service-name <stellatalk2> --label ${filename} --image ${image.path}`;
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error uploading image to Lightsail:', error);
+      callback(error);
+      return;
+    }
+    // 업로드된 파일의 URL을 생성
+    const url = `<http://52.79.173.63>/images/${filename}`;
+    callback(null, url);
   });
 }
 
