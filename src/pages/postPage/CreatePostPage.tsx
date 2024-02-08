@@ -45,10 +45,14 @@ const CreatePostPage: React.FC = () => {
 
     try {
 <<<<<<< HEAD
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:3001/create-post`, {
 =======
       const response = await fetch(`http://localhost:3000/create-post`, {
 >>>>>>> f209917 (:hammer: Modify: 경로 이름 변경)
+=======
+      const response = await fetch(`http://localhost:3001/create-post`, {
+>>>>>>> cf9a8ca (:bug: Fix: 리스폰 경로 3001로 변경)
         method: 'POST',
         body: formData,
       });
