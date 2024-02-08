@@ -172,6 +172,7 @@ function insertPost(title, content, imageUrl, user_id, res) {
     res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.', imageUrl });
   });
 }
+
 // 라이트세일 인스턴스에 파일 업로드하고 업로드된 파일의 URL을 반환하는 함수
 function uploadToLightsail(image, callback) {
   // 파일 이름을 유니크하게 생성
@@ -203,9 +204,10 @@ app.get('/get', (req, res) => {
   });
 });
 
+// Express 앱에서 에러 핸들링 미들웨어 추가
 app.use((error, req, res, next) => {
   console.error(error); // 에러 로깅
-  res.status(500).send({ error: 'Something went wrong' });
+  res.status(500).send({ error: 'Something went wrong' }); // 클라이언트에게 적절한 에러 응답 보내기
 });
 
 const PORT = 3001;
