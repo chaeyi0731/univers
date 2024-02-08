@@ -16,7 +16,7 @@ interface Message {
   timestamp: string;
 }
 
-const socket = io('http://localhost:3001');
+const socket = io('http://13.125.146.112');
 
 const ChatPage: React.FC = () => {
   const { user } = useContext(UserContext) as { user: User };
