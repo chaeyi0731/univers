@@ -146,38 +146,46 @@ const lightsail = new AWS.Lightsail({
 
 // 게시글 생성 엔드포인트
 app.post('/create-post', upload.single('image'), (req, res) => {
-  const { title, content } = req.body;
-  const image = req.file;
+  const { title, content, user_id } = req.body;
+  let imageUrl = null; // 이미지 URL을 null로 초기화
 
-  // 이미지 스토리지에 업로드
-  const bucketName = 'stella-talk1';
-  const objectKey = `${uuidv4()}-${image.originalname}`;
+  // 이미지가 첨부되었을 경우에만 처리
+  if (req.file) {
+    const image = req.file;
+    // 이미지 스토리지에 업로드
+    const bucketName = 'stlla-talk1';
+    const objectKey = `${uuidv4()}-${image.originalname}`;
+    const params = {
+      bucketName: bucketName,
+      localFilePath: image.path,
+      key: objectKey,
+    };
 
-  const params = {
-    bucketName: bucketName,
-    localFilePath: image.path,
-    key: objectKey,
-  };
-
-  lightsail.uploadBundle(params, (err, data) => {
-    if (err) {
-      console.error('스토리지 업로드 에러:', err);
-      return res.status(500).send('이미지 업로드 중에 오류가 발생했습니다.');
-    }
-
-    const imageUrl = data.location;
-
-    // 게시글 데이터베이스에 저장
-    const query = 'INSERT INTO Posts (title, content, image_url, timestamp) VALUES (?, ?, ?, NOW())';
-    db.query(query, [title, content, imageUrl], (error, results) => {
-      if (error) {
-        console.error('게시글 삽입 중 에러:', error);
-        return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
+    lightsail.uploadBundle(params, (err, data) => {
+      if (err) {
+        console.error('스토리지 업로드 에러:', err);
+        return res.status(500).send('이미지 업로드 중에 오류가 발생했습니다.');
       }
-      res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.' });
+      imageUrl = data.location; // 이미지 URL 업데이트
+      insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
     });
-  });
+  } else {
+    // 이미지가 첨부되지 않은 경우 바로 게시글 삽입
+    insertPost(title, content, imageUrl, user_id, res);
+  }
 });
+
+function insertPost(title, content, imageUrl, user_id, res) {
+  // 게시글 데이터베이스에 저장
+  const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
+  db.query(query, [title, content, imageUrl, user_id], (error, results) => {
+    if (error) {
+      console.error('게시글 삽입 중 에러:', error);
+      return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
+    }
+    res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.' });
+  });
+}
 
 app.get('/get', (req, res) => {
   const query = 'SELECT title FROM Posts'; // 게시글 제목을 가져오는 쿼리 (테이블 이름과 컬럼 이름 확인 필요)
