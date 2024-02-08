@@ -186,7 +186,7 @@ function uploadToLightsail(image, callback) {
       return;
     }
     // 업로드된 파일의 URL을 생성
-    const url = `<http://52.79.173.63>/images/${filename}`;
+    const url = `<http://13.125.146.112/>/images/${filename}`;
     callback(null, url);
   });
 }
