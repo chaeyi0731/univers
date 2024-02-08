@@ -209,6 +209,8 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = 3001;
-server.listen(PORT, '13.125.146.112', () => {
-  console.log(`Server is running on port ${PORT}.`);
+const HOST = '13.125.146.112';
+
+server.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
 });
