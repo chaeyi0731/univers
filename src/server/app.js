@@ -134,7 +134,6 @@ app.get('/api/chat', (req, res) => {
 
 //? 게시판 게시글 관련 API
 
-// 게시글 생성 엔드포인트
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body;
   let imageUrl = null; // 이미지 URL을 null로 초기화
@@ -150,7 +149,8 @@ app.post('/create-post', upload.single('image'), (req, res) => {
         return;
       }
       imageUrl = url; // 업로드된 파일의 URL 설정
-      insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
+      // 이미지 URL을 포함하여 게시글 삽입 함수 호출
+      insertPost(title, content, imageUrl, user_id, res);
     });
   } else {
     // 이미지가 첨부되지 않은 경우 바로 게시글 삽입
@@ -158,6 +158,7 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   }
 });
 
+// 게시글을 데이터베이스에 삽입하는 함수
 function insertPost(title, content, imageUrl, user_id, res) {
   // 이미지 URL이 빈 경우를 처리하기 위해 imageUrl의 기본값을 설정합니다.
   imageUrl = imageUrl || '';
@@ -171,7 +172,6 @@ function insertPost(title, content, imageUrl, user_id, res) {
     res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.', imageUrl });
   });
 }
-
 // 라이트세일 인스턴스에 파일 업로드하고 업로드된 파일의 URL을 반환하는 함수
 function uploadToLightsail(image, callback) {
   // 파일 이름을 유니크하게 생성
