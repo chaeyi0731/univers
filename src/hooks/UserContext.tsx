@@ -32,7 +32,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post('http://13.125.146.112/api/login', { username, password });
+      const response = await axios.post('http://13.125.146.112:3001/api/login', { username, password });
       if (response.data.success) {
         setUser(response.data.user);
       } else {
@@ -45,7 +45,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://13.125.146.112/api/logout');
+      await axios.post('http://13.125.146.112:3001/api/logout');
       setUser(null); // 로그아웃 시 user 상태를 초기화
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
