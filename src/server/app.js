@@ -84,7 +84,7 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://13.125.146.112', // 클라이언트의 주소
+    origin: 'http://13.125.146.112:3001', // 클라이언트의 주소
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
