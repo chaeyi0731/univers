@@ -211,8 +211,7 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = 3001;
-const HOST = '0.0.0.0';
 
-server.listen(PORT, HOST, () => {
-  console.log(`Server is running on http://${HOST}:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
