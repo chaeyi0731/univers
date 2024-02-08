@@ -194,10 +194,10 @@ app.post('/create-post', upload.single('image'), (req, res) => {
       key: objectKey,
     };
 
-    lightsail.uploadBundle(params, (err, data) => {
+    lightsail.upload(params, (err, data) => {
       if (err) {
-        console.error('스토리지 업로드 에러:', err);
-        return res.status(500).send('이미지 업로드 중에 오류가 발생했습니다.');
+        console.error('파일 업로드 중 에러:', err);
+        return res.status(500).send('파일 업로드 중에 오류가 발생했습니다.');
       }
       imageUrl = data.location; // 이미지 URL 업데이트
       insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
