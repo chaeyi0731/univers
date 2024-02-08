@@ -12,9 +12,12 @@ const cors = require('cors');
 const mysql = require('mysql');
 const multer = require('multer');
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 const AWS = require('aws-sdk');
 >>>>>>> 03ceb55 (:pencil2: Rename: 변수명 변경)
+=======
+>>>>>>> 97a8a7b (:bug: Fix: 스토리지 사용하지 않아서 삭제)
 const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
 const fs = require('fs');
@@ -180,12 +183,6 @@ function insertPost(title, content, imageUrl, user_id, res) {
   });
 }
 
-const lightsail = new AWS.Lightsail({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
 // 게시글 생성 엔드포인트
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body;
@@ -194,27 +191,12 @@ app.post('/create-post', upload.single('image'), (req, res) => {
   // 이미지가 첨부되었을 경우에만 처리
   if (req.file) {
     const image = req.file;
-    // 이미지 스토리지에 업로드
-    const bucketName = 'stlla-talk1';
-    const objectKey = `${uuidv4()}-${image.originalname}`;
-    const params = {
-      bucketName: bucketName,
-      localFilePath: image.path,
-      key: objectKey,
-    };
-
-    lightsail.upload(params, (err, data) => {
-      if (err) {
-        console.error('파일 업로드 중 에러:', err);
-        return res.status(500).send('파일 업로드 중에 오류가 발생했습니다.');
-      }
-      imageUrl = data.location; // 이미지 URL 업데이트
-      insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
-    });
-  } else {
-    // 이미지가 첨부되지 않은 경우 바로 게시글 삽입
-    insertPost(title, content, imageUrl, user_id, res);
+    // 이미지 URL 생성
+    const imagePath = `/${image.filename}`; // 예시: /uploads/filename.jpg
+    imageUrl = `${req.protocol}://${req.get('host')}${imagePath}`;
   }
+
+  insertPost(title, content, imageUrl, user_id, res);
 });
 
 function insertPost(title, content, imageUrl, user_id, res) {
@@ -227,7 +209,7 @@ function insertPost(title, content, imageUrl, user_id, res) {
       console.error('게시글 삽입 중 에러:', error);
       return res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
     }
-    res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.' });
+    res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.', imageUrl });
   });
 }
 
