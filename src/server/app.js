@@ -63,9 +63,11 @@ app.post('/api/login', (req, res) => {
       return;
     }
     const user = results[0];
+
+    // 비밀번호 비교
     if (password !== user.password) {
-      res.status(401).send('비밀번호가 일치하지 않습니다.');
-      return;
+      // 수정: 비밀번호를 일치 여부로 직접 비교
+      return res.status(401).send('비밀번호가 일치하지 않습니다.');
     }
     res.send({ success: true, user });
   });
@@ -210,6 +212,8 @@ app.post('/create-post', upload.single('image'), (req, res) => {
 });
 
 function insertPost(title, content, imageUrl, user_id, res) {
+  // 이미지 URL이 빈 경우를 처리하기 위해 imageUrl의 기본값을 설정합니다.
+  imageUrl = imageUrl || '';
   // 게시글 데이터베이스에 저장
   const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
   db.query(query, [title, content, imageUrl, user_id], (error, results) => {
