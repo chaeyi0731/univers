@@ -1,4 +1,3 @@
-// sever/app,js
 require('dotenv').config();
 
 const express = require('express');
@@ -20,8 +19,8 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD, // 수정됨
-  database: process.env.DB_DATABASE, // 수정됨
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 db.connect((err) => {
@@ -64,8 +63,8 @@ app.post('/api/login', (req, res) => {
     const user = results[0];
 
     // 비밀번호 비교
-    const isMatch = await (password, user.password);
-    if (!isMatch) {
+    if (password !== user.password) {
+      // 수정: 비밀번호를 일치 여부로 직접 비교
       return res.status(401).send('비밀번호가 일치하지 않습니다.');
     }
 
@@ -173,6 +172,8 @@ app.post('/create-post', upload.single('image'), (req, res) => {
 });
 
 function insertPost(title, content, imageUrl, user_id, res) {
+  // 이미지 URL이 빈 경우를 처리하기 위해 imageUrl의 기본값을 설정합니다.
+  imageUrl = imageUrl || '';
   // 게시글 데이터베이스에 저장
   const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
   db.query(query, [title, content, imageUrl, user_id], (error, results) => {
