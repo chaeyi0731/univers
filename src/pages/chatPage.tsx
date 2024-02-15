@@ -16,11 +16,15 @@ interface Message {
   timestamp: string;
 }
 
-const socket = io('http://13.125.146.112:3001/chatting', { transports: ['websocket'] });
+let socket;
 
-socket.on('chat message', (msg) => {
-  console.log(msg);
-});
+if (process.env.REACT_APP_ENABLE_SOCKET === 'true') {
+  socket = io('http://13.125.146.112:3001/chatting', { transports: ['websocket'] });
+
+  socket.on('chat message', (msg) => {
+    console.log(msg);
+  });
+}
 
 const ChatPage: React.FC = () => {
   const { user } = useContext(UserContext) as { user: User };
@@ -39,7 +43,7 @@ const ChatPage: React.FC = () => {
   };
 
   const handleSendClick = () => {
-    if (!user || !user.username) {
+    if (!user || !user.username || !socket) {
       console.error('로그인한 사용자만 메시지를 보낼 수 있습니다.');
       return;
     }
