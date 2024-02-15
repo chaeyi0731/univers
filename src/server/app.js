@@ -20,6 +20,7 @@ const io = new Server(server, {
     allowedHeaders: ['my-custom-header'],
     credentials: true,
   },
+  transports: ['websocket'],
 });
 
 // CORS 설정
