@@ -12,6 +12,15 @@ const { exec } = require('child_process');
 
 const upload = multer({ dest: 'uploads/' });
 
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://13.125.146.112',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
+  },
+});
+
 // CORS 설정
 app.use(cors());
 app.use(express.json());
@@ -81,15 +90,6 @@ app.post('/api/logout', (req, res) => {
 });
 
 //? 채팅 관련 API
-
-const io = require('socket.io')(server, {
-  cors: {
-    origin: '*', // 클라이언트의 주소
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-  transports: ['websocket'], // 이 줄을 추가하세요
-});
 
 io.on('connection', (socket) => {
   console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
