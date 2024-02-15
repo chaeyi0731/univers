@@ -16,7 +16,11 @@ interface Message {
   timestamp: string;
 }
 
-const socket = io('http://13.125.146.112:3001', { transports: ['websocket'] });
+const socket = io('http://13.125.146.112:3001/chatting');
+
+socket.on('chat message', (msg) => {
+  console.log(msg);
+});
 
 const ChatPage: React.FC = () => {
   const { user } = useContext(UserContext) as { user: User };
