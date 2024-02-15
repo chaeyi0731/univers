@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 interface User {
   username: string;
@@ -16,12 +16,12 @@ interface Message {
   timestamp: string;
 }
 
-let socket;
+let socket: Socket | any;
 
 if (process.env.REACT_APP_ENABLE_SOCKET === 'true') {
   socket = io('http://13.125.146.112:3001/chatting', { transports: ['websocket'] });
 
-  socket.on('chat message', (msg) => {
+  socket.on('chat message', (msg: any) => {
     console.log(msg);
   });
 }
