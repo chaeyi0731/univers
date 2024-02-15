@@ -8,13 +8,14 @@ const cors = require('cors');
 const mysql = require('mysql');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { Server } = require('socket.io');
 const { exec } = require('child_process');
 
 const upload = multer({ dest: 'uploads/' });
 
-const io = require('socket.io')(server, {
+const io = new Server(server, {
   cors: {
-    origin: 'http://13.125.146.112',
+    origin: 'http://13.125.146.112', // 클라이언트 주소
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,
