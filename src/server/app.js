@@ -84,10 +84,11 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: "*", // 클라이언트의 주소
+    origin: '*', // 클라이언트의 주소
     methods: ['GET', 'POST'],
     credentials: true,
   },
+  transports: ['websocket'], // 이 줄을 추가하세요
 });
 
 io.on('connection', (socket) => {
