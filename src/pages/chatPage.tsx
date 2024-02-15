@@ -16,7 +16,7 @@ interface Message {
   timestamp: string;
 }
 
-const socket = io('http://13.125.146.112:3001/chatting');
+const socket = io('http://13.125.146.112:3001/chatting', { transports: ['websocket'] });
 
 socket.on('chat message', (msg) => {
   console.log(msg);
