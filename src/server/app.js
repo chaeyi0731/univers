@@ -93,6 +93,18 @@ app.post('/api/logout', (req, res) => {
 
 //? 채팅 관련 API
 
+io.of('/chatting').on('connection', (socket) => {
+  console.log('새로운 클라이언트가 /chatting에서 연결되었습니다:', socket.id);
+
+  socket.on('chat message', (msg) => {
+    io.of('/chatting').emit('chat message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('클라이언트가 /chatting에서 연결을 끊었습니다:', socket.id);
+  });
+});
+
 io.on('connection', (socket) => {
   console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
 
