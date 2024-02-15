@@ -211,9 +211,7 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = 3001;
-const HOST = '13.125.146.112'; // 이 줄을 추가하세요
 
-server.listen(PORT, HOST, () => {
-  // HOST를 추가하세요
-  console.log(`Server is running on http://${HOST}:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server is running on http://0.0.0.0:${PORT}`);
 });
