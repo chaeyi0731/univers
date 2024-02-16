@@ -15,11 +15,13 @@ const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
-const s3 = new AWS.S3({
+AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
+
+const s3 = new AWS.S3();
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -118,11 +120,8 @@ app.get('/api/chat', (req, res) => {
   });
 });
 
-
-});
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body;
-  let imageUrl = null;
   if (req.file) {
     const image = req.file;
     const fileContent = fs.readFileSync(image.path);
@@ -140,13 +139,15 @@ app.post('/create-post', upload.single('image'), (req, res) => {
           res.status(500).send('Failed to upload image to S3');
           return;
         }
-        imageUrl = data.Location;
+        const imageUrl = data.Location;
         insertPost(title, content, imageUrl, user_id, res);
       }
     );
   } else {
-    insertPost(title, content, imageUrl, user_id, res);
+    insertPost(title, content, null, user_id, res); // imageUrl is null if no image is uploaded
   }
+});
+
 function insertPost(title, content, imageUrl, user_id, res) {
   const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
   db.query(query, [title, content, imageUrl, user_id], (error, results) => {
