@@ -25,8 +25,12 @@ AWS.config.update({
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
+<<<<<<< HEAD
 const s3 = new AWS.S3({
 >>>>>>> 2199c46 (:hammer: Modify: s3 사용)
+=======
+AWS.config.update({
+>>>>>>> e6f4545 (:hammer: Modify: 여러가지 문제 해결)
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
@@ -37,6 +41,8 @@ const s3 = new AWS.S3();
 =======
 const { exec } = require('child_process');
 >>>>>>> fca82b4 (:bug: Fix: 게시글을 라이트세일 인스턴스에서 url을 받아와서 저장하기)
+
+const s3 = new AWS.S3();
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -161,6 +167,7 @@ app.get('/api/chat', (req, res) => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body; // user_id 추가
   let imageUrl = null; // 이미지 URL 초기화
@@ -206,9 +213,10 @@ function insertPost(title, content, imageUrl, user_id, res) {
 >>>>>>> 2199c46 (:hammer: Modify: s3 사용)
 
 });
+=======
+>>>>>>> e6f4545 (:hammer: Modify: 여러가지 문제 해결)
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body;
-  let imageUrl = null;
   if (req.file) {
     const image = req.file;
     const fileContent = fs.readFileSync(image.path);
@@ -226,13 +234,15 @@ app.post('/create-post', upload.single('image'), (req, res) => {
           res.status(500).send('Failed to upload image to S3');
           return;
         }
-        imageUrl = data.Location;
+        const imageUrl = data.Location;
         insertPost(title, content, imageUrl, user_id, res);
       }
     );
   } else {
-    insertPost(title, content, imageUrl, user_id, res);
+    insertPost(title, content, null, user_id, res); // imageUrl is null if no image is uploaded
   }
+});
+
 function insertPost(title, content, imageUrl, user_id, res) {
   const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
   db.query(query, [title, content, imageUrl, user_id], (error, results) => {
