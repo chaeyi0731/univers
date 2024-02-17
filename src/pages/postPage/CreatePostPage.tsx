@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../hooks/UserContext';
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -17,14 +19,18 @@ const CreatePostPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!image) {
-      alert('이미지를 첨부해주세요.');
-      return;
-    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
     formData.append('image', image);
+    formData.append('userId', user_id);
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login'); // 로그인 페이지로 이동
+      return;
+    }
 
     try {
       const response = await fetch(`http://localhost:3001/create-post`, {
