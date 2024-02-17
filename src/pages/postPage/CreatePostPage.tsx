@@ -9,11 +9,18 @@ import { UserContext } from '../../hooks/UserContext';
 import { UserContext } from '../../hooks/UserContext';
 >>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
+interface PostFormData {
+  title: string;
+  content: string;
+  image?: File; // 이미지는 선택적으로 포함될 수 있습니다.
+}
+
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
@@ -25,6 +32,10 @@ const CreatePostPage: React.FC = () => {
 =======
   const { user } = useContext(UserContext);
 >>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
+=======
+  const userContext = useContext(UserContext);
+  const user = userContext?.user; // userContext에서 로그인한 사용자 정보 가져오기
+>>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -33,6 +44,7 @@ const CreatePostPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (!user) {
       // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
@@ -57,14 +69,23 @@ const CreatePostPage: React.FC = () => {
 =======
     formData.append('userId', user_id);
 
+=======
+>>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
     if (!user) {
       alert('로그인이 필요합니다.');
-      navigate('/login'); // 로그인 페이지로 이동
+      navigate('/login');
       return;
     }
 >>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (image) formData.append('image', image); // 이미지가 있는 경우에만 추가
+    formData.append('userId', user.user_id.toString()); // 로그인한 사용자의 ID를 문자열로 변환하여 추가
+
     try {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       const response = await fetch(`http://localhost:3001/create-post`, {
@@ -74,8 +95,12 @@ const CreatePostPage: React.FC = () => {
 =======
       const response = await fetch(`http://localhost:3001/create-post`, {
 >>>>>>> cf9a8ca (:bug: Fix: 리스폰 경로 3001로 변경)
+=======
+      const response = await fetch('http://localhost:3001/create-post', {
+>>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
         method: 'POST',
         body: formData,
+        credentials: 'include', // 쿠키를 포함시키는 경우
       });
 
       if (!response.ok) {
@@ -83,7 +108,7 @@ const CreatePostPage: React.FC = () => {
       }
       const data = await response.json();
       console.log(data);
-      navigate('/post');
+      navigate('/posts'); // 게시글 목록 페이지로 이동
     } catch (error) {
       console.error('게시글 생성 중 에러 발생:', error);
     }
