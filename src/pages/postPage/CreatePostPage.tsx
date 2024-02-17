@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../hooks/UserContext';
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
@@ -18,16 +20,17 @@ const CreatePostPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!user) {
-      // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-      navigate('/login');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
     formData.append('image', image);
+    formData.append('userId', user_id);
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login'); // 로그인 페이지로 이동
+      return;
+    }
 
     try {
       const response = await fetch(`http://localhost:3001/create-post`, {
