@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { UserContext } from '../../hooks/UserContext';
 =======
 >>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
+=======
+import { UserContext } from '../../hooks/UserContext';
+>>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -11,12 +15,16 @@ const CreatePostPage: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
 <<<<<<< HEAD
+<<<<<<< HEAD
   const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
 =======
 >>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
+=======
+  const { user } = useContext(UserContext);
+>>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -25,12 +33,15 @@ const CreatePostPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+<<<<<<< HEAD
     if (!user) {
       // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
       navigate('/login');
       return;
     }
 
+=======
+>>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
@@ -41,7 +52,17 @@ const CreatePostPage: React.FC = () => {
     formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
 =======
     formData.append('image', image);
+<<<<<<< HEAD
 >>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
+=======
+    formData.append('userId', user_id);
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login'); // 로그인 페이지로 이동
+      return;
+    }
+>>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
     try {
 <<<<<<< HEAD
