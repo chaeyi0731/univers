@@ -7,10 +7,7 @@ const CreatePostPage: React.FC = () => {
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
-
-  // UserContext가 null이 아닌지 확인하고 user 객체에 접근
-  const user = userContext ? userContext.user : null;
+  const { user } = useContext(UserContext);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -19,19 +16,17 @@ const CreatePostPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!user) {
-      // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-      navigate('/login');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    if (image) {
-      formData.append('image', image); // 이미지가 있을 때만 추가
+    formData.append('image', image);
+    formData.append('userId', user_id);
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login'); // 로그인 페이지로 이동
+      return;
     }
-    formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
 
     try {
       const response = await fetch(`http://localhost:3001/create-post`, {
