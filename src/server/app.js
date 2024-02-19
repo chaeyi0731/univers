@@ -129,11 +129,15 @@ app.post('/api/logout', (req, res) => {
   res.send({ success: true, message: 'Successfully logged out' });
 });
 
+//? 채팅관련 API
+
+//? 소켓 관련
+
 const io = require('socket.io')(server, {
   cors: {
-    origin: process.env.CLIENT_ORIGIN,
-    methods: ['GET', 'POST'],
-    credentials: true,
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'], // 허용할 HTTP 메소드
+    credentials: true, // 쿠키 및 인증 헤더 허용
   },
 });
 
