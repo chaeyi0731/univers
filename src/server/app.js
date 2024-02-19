@@ -122,7 +122,9 @@ app.get('/api/chat', (req, res) => {
 });
 
 app.post('/create-post', upload.single('image'), (req, res) => {
-  const { title, content, user_id } = req.body;
+  const { title, content, user_id } = req.body; // user_id 추가
+  let imageUrl = null; // 이미지 URL 초기화
+
   if (req.file) {
     const image = req.file;
     const fileContent = fs.readFileSync(image.path);
@@ -140,12 +142,12 @@ app.post('/create-post', upload.single('image'), (req, res) => {
           res.status(500).send('Failed to upload image to S3');
           return;
         }
-        const imageUrl = data.Location;
-        insertPost(title, content, imageUrl, user_id, res);
+        imageUrl = data.Location;
+        insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
       }
     );
   } else {
-    insertPost(title, content, null, user_id, res); // imageUrl is null if no image is uploaded
+    insertPost(title, content, null, user_id, res); // 이미지가 없는 경우
   }
 });
 
