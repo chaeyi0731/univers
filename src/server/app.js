@@ -1,4 +1,6 @@
+//환경변수 가져오기
 require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const http = require('http');
