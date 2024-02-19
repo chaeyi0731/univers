@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -17,6 +18,9 @@ interface PostFormData {
 }
 =======
 >>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
+=======
+import { UserContext } from '../../hooks/UserContext';
+>>>>>>> 33856fb (:hammer: Modify: 로그인확인)
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -27,10 +31,14 @@ const CreatePostPage: React.FC = () => {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 33856fb (:hammer: Modify: 로그인확인)
   const userContext = useContext(UserContext); // userContext로 변경하여 전체 컨텍스트를 받아옴
 
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
+<<<<<<< HEAD
 =======
 >>>>>>> d2a50fb (:hammer: Modify: 라이트세일의 버킷이용)
 =======
@@ -42,6 +50,8 @@ const CreatePostPage: React.FC = () => {
 >>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
 =======
 >>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
+=======
+>>>>>>> 33856fb (:hammer: Modify: 로그인확인)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -49,6 +59,7 @@ const CreatePostPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 <<<<<<< HEAD
@@ -91,10 +102,22 @@ const CreatePostPage: React.FC = () => {
       return;
     }
 >>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
+=======
+
+    if (!user) {
+      // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+      navigate('/login');
+      return;
+    }
+
+>>>>>>> 33856fb (:hammer: Modify: 로그인확인)
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('image', image);
+    if (image) {
+      formData.append('image', image); // 이미지가 있을 때만 추가
+    }
+    formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
 
     try {
 <<<<<<< HEAD
