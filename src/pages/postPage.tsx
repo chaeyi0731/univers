@@ -15,7 +15,7 @@ const PostPage: React.FC = () => {
   const userContext = useContext(UserContext); // UserContext 사용
 
   useEffect(() => {
-    fetch('/posts')
+    fetch('http://localhost:3001/posts')
       .then((response) => {
         // 응답 상태 코드가 성공적인지 확인
         if (!response.ok) {
