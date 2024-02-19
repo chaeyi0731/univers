@@ -5,44 +5,23 @@ import { UserContext } from '../hooks/UserContext';
 interface Post {
   id: number;
   title: string;
-  username: string;
-  timestamp: string;
+  username: string; // 게시글 작성자 이름
+  timestamp: string; // 게시글 작성 시간
 }
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext);
-
-  const handleRowClick = useCallback(
-    (postId: number) => {
-      navigate(`/post/${postId}`);
-    },
-    [navigate]
-  );
+  const userContext = useContext(UserContext); // UserContext 사용
 
   useEffect(() => {
     if (!userContext?.user) {
       navigate('/login');
-      return;
+    } else {
+      fetch('/posts')
+        .then((response) => response.json())
+        .then((data) => setPosts(data));
     }
-
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch('http://43.203.209.74/posts');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error('There was a problem with your fetch operation:', error);
-        setError('Failed to load posts.');
-      }
-    };
-
-    fetchPosts();
   }, [userContext, navigate]);
 
   return (
@@ -50,8 +29,17 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
-          {error && <p className="error">{error}</p>}
-          {userContext?.user && (
+          {posts.map((post, index) => (
+            <div key={index}>
+              <h2>
+                <Link to={`/post/${post.id}`}>{post.title}</Link>
+              </h2>
+              <p>
+                작성자: {post.username}, 작성시간: {new Date(post.timestamp).toLocaleString()}
+              </p>
+            </div>
+          ))}
+          {userContext?.user && ( // 조건부 렌더링에서 userContext?.user 사용
             <Link to="/create-post">
               <button>게시글 작성</button>
             </Link>
