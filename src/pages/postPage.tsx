@@ -1,35 +1,45 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
-import '../components/layout/layout.css';
+
+interface Post {
+  id: number;
+  title: string;
+  username: string; // 게시글 작성자 이름
+  timestamp: string; // 게시글 작성 시간
+}
 
 const PostPage: React.FC = () => {
-  const [titles, setTitles] = useState<string[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext); // UserContext 전체를 가져옴
-
-  // UserContext가 null이거나 user 프로퍼티가 없는 경우에 대한 예외 처리 추가
-  const user = userContext?.user;
+  const userContext = useContext(UserContext); // UserContext 사용
 
   useEffect(() => {
-    if (!user) {
+    if (!userContext?.user) {
       navigate('/login');
+    } else {
+      fetch('/posts')
+        .then((response) => response.json())
+        .then((data) => setPosts(data));
     }
-  }, [user, navigate]);
-
-  useEffect(() => {
-    fetch('/posts')
-      .then((response) => response.json())
-      .then((data) => setTitles(data));
-  }, []);
+  }, [userContext, navigate]);
 
   return (
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
-          {user ? titles.map((title, index) => <h2 key={index}>{title}</h2>) : <p>로그인 후에 게시글을 볼 수 있습니다.</p>}
-          {user && (
+          {posts.map((post, index) => (
+            <div key={index}>
+              <h2>
+                <Link to={`/post/${post.id}`}>{post.title}</Link>
+              </h2>
+              <p>
+                작성자: {post.username}, 작성시간: {new Date(post.timestamp).toLocaleString()}
+              </p>
+            </div>
+          ))}
+          {userContext?.user && ( // 조건부 렌더링에서 userContext?.user 사용
             <Link to="/create-post">
               <button>게시글 작성</button>
             </Link>
