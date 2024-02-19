@@ -15,8 +15,19 @@ const PostPage: React.FC = () => {
   const userContext = useContext(UserContext); // UserContext 사용
 
   useEffect(() => {
-    if (!userContext?.user) {
-      navigate('/login');
+    fetch('/posts')
+      .then((response) => {
+        // 응답 상태 코드가 성공적인지 확인
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => setPosts(data))
+      .catch((error) => {
+        console.error('There was a problem with your fetch operation:', error);
+      });
+  }, []);
 
       return;
     }
