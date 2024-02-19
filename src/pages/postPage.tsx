@@ -3,28 +3,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
 
 interface Post {
-  post_id: number;
+  id: number;
   title: string;
-  name: string;
-  timestamp: string;
+  username: string; // 게시글 작성자 이름
+  timestamp: string; // 게시글 작성 시간
 }
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext);
-
-  const handleRowClick = useCallback(
-    (post_id: number) => {
-      navigate(`/post/${post_id}`);
-    },
-    [navigate]
-  );
+  const userContext = useContext(UserContext); // UserContext 사용
 
   useEffect(() => {
     if (!userContext?.user) {
       navigate('/login');
+
       return;
     }
 
@@ -44,19 +37,13 @@ const PostPage: React.FC = () => {
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         setError('Failed to load posts.');
-      }
-    };
-
-    fetchPosts();
-  }, [userContext, navigate]);
-
-  return (
-    <div className="main-content">
-      <div className="widgets">
-        <div className="postwidgets">
-          <h1>게시판</h1>
-          {error && <p className="error">{error}</p>}
-          {userContext?.user && (
+                <Link to={`/post/${post.id}`}>{post.title}</Link>
+              </h2>
+              <p>
+                작성자: {post.username}, 작성시간: {new Date(post.timestamp).toLocaleString()}
+              </p>
+          ))}
+          {userContext?.user && ( 
             <Link to="/create-post">
               <button>게시글 작성</button>
             </Link>
