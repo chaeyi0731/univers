@@ -166,21 +166,18 @@ function insertPost(title, content, imageUrl, user_id, res) {
 app.get('/posts', async (req, res) => {
   const query = `
     SELECT 
-      Posts.id, 
-      Posts.title, 
-      Users.username, 
-      Posts.timestamp
-    FROM Posts
-    JOIN Users ON Posts.user_id = Users.id
-    ORDER BY Posts.timestamp DESC
+      p.id, p.title, u.username, p.timestamp
+    FROM Posts p
+    JOIN Users u ON p.user_id = u.id
+    ORDER BY p.timestamp DESC
   `;
-  try {
-    const [results] = await db.promise().query(query);
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Server error');
+    }
     res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
+  });
 });
 
 const PORT = process.env.PORT || 3001;
