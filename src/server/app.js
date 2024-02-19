@@ -26,10 +26,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  host: 'universe.cliyuoye061h.ap-northeast-2.rds.amazonaws.com',
+  user: 'admin',
+  password: 'zico920914',
+  database: 'univsers',
+  port: 3306,
 });
 
 db.connect((err) => {
