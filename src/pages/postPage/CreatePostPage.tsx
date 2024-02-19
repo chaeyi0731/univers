@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { UserContext } from '../../hooks/UserContext';
@@ -14,12 +15,15 @@ interface PostFormData {
   content: string;
   image?: File; // 이미지는 선택적으로 포함될 수 있습니다.
 }
+=======
+>>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -36,6 +40,8 @@ const CreatePostPage: React.FC = () => {
   const userContext = useContext(UserContext);
   const user = userContext?.user; // userContext에서 로그인한 사용자 정보 가져오기
 >>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
+=======
+>>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
@@ -43,6 +49,7 @@ const CreatePostPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -78,13 +85,19 @@ const CreatePostPage: React.FC = () => {
     }
 >>>>>>> 96ce3c9 (:poop: Bad: usercontext에서 로그인 확인)
 
+=======
+    if (!image) {
+      alert('이미지를 첨부해주세요.');
+      return;
+    }
+>>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    if (image) formData.append('image', image); // 이미지가 있는 경우에만 추가
-    formData.append('userId', user.user_id.toString()); // 로그인한 사용자의 ID를 문자열로 변환하여 추가
+    formData.append('image', image);
 
     try {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -98,9 +111,11 @@ const CreatePostPage: React.FC = () => {
 =======
       const response = await fetch('http://localhost:3001/create-post', {
 >>>>>>> f1b42bc (:poop: Bad: 로그인 확인후 form data 정리)
+=======
+      const response = await fetch(`http://localhost:3001/create-post`, {
+>>>>>>> 1a2aa34 (:poop: Bad: 오류로 인해 이전 코드로 돌아감)
         method: 'POST',
         body: formData,
-        credentials: 'include', // 쿠키를 포함시키는 경우
       });
 
       if (!response.ok) {
@@ -108,7 +123,7 @@ const CreatePostPage: React.FC = () => {
       }
       const data = await response.json();
       console.log(data);
-      navigate('/posts'); // 게시글 목록 페이지로 이동
+      navigate('/post');
     } catch (error) {
       console.error('게시글 생성 중 에러 발생:', error);
     }
