@@ -258,21 +258,24 @@ function insertPost(title, content, imageUrl, user_id, res) {
   });
 }
 
-app.get('/get', (req, res) => {
-  const query = 'SELECT title FROM Posts';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Server error');
-      return;
-    }
-    res.json(results.map((result) => result.title));
-  });
-});
-
-app.use((error, req, res, next) => {
-  console.error(error);
-  res.status(500).send({ error: 'Something went wrong' });
+app.get('/posts', async (req, res) => {
+  const query = `
+    SELECT 
+      Posts.id, 
+      Posts.title, 
+      Users.username, 
+      Posts.timestamp
+    FROM Posts
+    JOIN Users ON Posts.user_id = Users.id
+    ORDER BY Posts.timestamp DESC
+  `;
+  try {
+    const [results] = await db.promise().query(query);
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
 });
 
 const PORT = process.env.PORT || 3001;
