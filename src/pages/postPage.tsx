@@ -5,29 +5,38 @@ import { UserContext } from '../hooks/UserContext';
 interface Post {
   id: number;
   title: string;
-  username: string; // 게시글 작성자 이름
-  timestamp: string; // 게시글 작성 시간
+  username: string;
+  timestamp: string;
 }
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
-  const userContext = useContext(UserContext); // UserContext 사용
+  const userContext = useContext(UserContext);
 
   useEffect(() => {
-    fetch('http://localhost:3001/posts')
-      .then((response) => {
-        // 응답 상태 코드가 성공적인지 확인
+    // userContext가 유효한지 확인
+    if (!userContext || !userContext.user) {
+      navigate('/login');
+      return;
+    }
+
+    // 포스트 데이터 가져오기
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/posts');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
-      })
-      .then((data) => setPosts(data))
-      .catch((error) => {
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
-      });
-  }, []);
+      }
+    };
+
+    fetchPosts();
+  }, [navigate, userContext]);
 
   return (
     <div className="main-content">
@@ -44,7 +53,8 @@ const PostPage: React.FC = () => {
               </p>
             </div>
           ))}
-          {userContext?.user && ( // 조건부 렌더링에서 userContext?.user 사용
+
+          {userContext?.user && (
             <Link to="/create-post">
               <button>게시글 작성</button>
             </Link>
