@@ -11,10 +11,8 @@ const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const mysql = require('mysql');
-const multer = require('multer');
+
 const { v4: uuidv4 } = require('uuid');
-const AWS = require('aws-sdk');
-const fs = require('fs');
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,

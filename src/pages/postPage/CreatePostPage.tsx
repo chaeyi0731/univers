@@ -12,10 +12,6 @@ const CreatePostPage: React.FC = () => {
   // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const user = userContext ? userContext.user : null;
 
-  // UserContext가 null이 아닌지 확인하고 user 객체에 접근
-  const user = userContext ? userContext.user : null;
-
-  // UserContext가 null이 아닌지 확인하고 user 객체에 접근
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => e.target.files && setImage(e.target.files[0]);
