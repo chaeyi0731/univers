@@ -56,7 +56,7 @@ const PostDetailPage: React.FC = () => {
     if (!userContext?.user) return;
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}:3001/comments`, {
+      const response = await fetch('http://43.203.209.74:3001/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
