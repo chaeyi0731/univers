@@ -9,6 +9,7 @@ interface Comment {
   user_id: number;
   content: string;
   timestamp: string;
+  name: string;
 }
 
 interface PostDetail {
@@ -91,6 +92,7 @@ const PostDetailPage: React.FC = () => {
           {comments.map((comment) => (
             <div key={comment.comment_id}>
               <p>{comment.content}</p>
+              <span>Written by: {comment.name}</span>
               <span>{new Date(comment.timestamp).toLocaleString()}</span>
             </div>
           ))}
