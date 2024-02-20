@@ -81,19 +81,21 @@ const PostDetailPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>{postDetail?.title}</h1>
-      <p>{postDetail?.content}</p>
+    <div className="main-content">
       <div>
-        <h2>Comments</h2>
-        {comments.map((comment) => (
-          <div key={comment.comment_id}>
-            <p>{comment.content}</p>
-            <span>{new Date(comment.timestamp).toLocaleString()}</span>
-          </div>
-        ))}
-        <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
-        <button onClick={handleCommentSubmit}>Submit Comment</button>
+        <h1>{postDetail?.title}</h1>
+        <p>{postDetail?.content}</p>
+        <div>
+          <h2>Comments</h2>
+          {comments.map((comment) => (
+            <div key={comment.comment_id}>
+              <p>{comment.content}</p>
+              <span>{new Date(comment.timestamp).toLocaleString()}</span>
+            </div>
+          ))}
+          <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
+          <button onClick={handleCommentSubmit}>Submit Comment</button>
+        </div>
       </div>
     </div>
   );
