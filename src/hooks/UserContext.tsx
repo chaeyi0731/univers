@@ -32,7 +32,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post('http://43.203.209.74:3001/api/login', { username, password });
+      const response = await axios.post('http://localhost:3001/api/login', { username, password });
       if (response.data.success) {
         setUser(response.data.user);
       } else {
