@@ -192,9 +192,8 @@ ORDER BY Posts.timestamp DESC;
 
 //? 게시글 상세보기
 
-app.get('/api/posts/:id', (req, res) => {
-  const { id } = req.params;
-
+app.get('/posts/:postId', (req, res) => {
+  const { postId } = req.params;
   const query = `
     SELECT Posts.post_id, Posts.title, Posts.content, Posts.image_url, Posts.timestamp, Users.username
     FROM Posts
@@ -202,16 +201,13 @@ app.get('/api/posts/:id', (req, res) => {
     WHERE Posts.post_id = ?
   `;
 
-  db.query(query, [id], (error, results) => {
+  db.query(query, [postId], (error, results) => {
     if (error) {
       console.error('Error fetching post details:', error);
-      return res.status(500).send('Server error');
-    }
-
-    if (results.length > 0) {
+      res.status(500).send('Server error');
+    } else if (results.length > 0) {
       const post = results[0];
-      // 추가된 부분: 이미지 URL이 있으면 전송, 없으면 null 처리
-      post.image_url = post.image_url || null;
+      post.image_url = post.image_url || null; // 이미지 URL이 없는 경우 null 처리
       res.json(post);
     } else {
       res.status(404).send('Post not found');
