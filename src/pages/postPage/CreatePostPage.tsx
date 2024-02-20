@@ -53,24 +53,25 @@ const CreatePostPage: React.FC = () => {
   return (
     <div className="main-content">
       <div className="widgets">
-        <form onSubmit={handleSubmit}>
-          <label>
+        <form className="createPostFormContainer" onSubmit={handleSubmit}>
+          <label className="styles.createPostFormLabel">
             제목:
-            <input type="text" value={title} onChange={handleTitleChange} />
+            <input className="createPostFormInput" type="text" value={title} onChange={handleTitleChange} />
           </label>
-          <label>
+          <label className="createPostFormLabel">
             내용:
-            <textarea value={content} onChange={handleContentChange} />
+            <textarea className="createPostFormTextarea" value={content} onChange={handleContentChange} />
           </label>
-          <label>
+          <label className="createPostFormLabel">
             이미지 첨부:
-            <input type="file" name="image" onChange={handleImageUpload} />
+            <input className="createPostFormInput" type="file" name="image" onChange={handleImageUpload} />
           </label>
-          <button type="submit">게시글 작성</button>
+          <button className="createPostFormButton" type="submit">
+            게시글 작성
+          </button>
         </form>
       </div>
     </div>
   );
 };
-
 export default CreatePostPage;
