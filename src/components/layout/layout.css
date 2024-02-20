@@ -308,3 +308,33 @@ body {
   justify-content: space-around;
   align-items: center;
 }
+
+/* post 테이블 스타일 */
+.table-container {
+  margin: 20px auto;
+  width: 90%;
+  overflow-x: auto;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 20px;
+  border-bottom: 1px solid;
+  text-align: center;
+}
+
+th {
+  background-color: rgba(0, 0, 0, 0.809);
+}
+
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
