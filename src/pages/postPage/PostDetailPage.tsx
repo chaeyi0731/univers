@@ -9,15 +9,14 @@ interface Comment {
   user_id: number;
   content: string;
   timestamp: string;
-  name: string;
 }
 
 interface PostDetail {
   post_id: number;
   title: string;
   content: string;
-  image_url: string | null;
 }
+
 const PostDetailPage: React.FC = () => {
   const [postDetail, setPostDetail] = useState<PostDetail | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -29,7 +28,7 @@ const PostDetailPage: React.FC = () => {
     // 게시글 상세 정보를 가져옵니다.
     const fetchPostDetail = async () => {
       try {
-        const response = await fetch(`http://43.203.209.74:3001/posts/${postId}`);
+        const response = await fetch(`http://localhost:3001/posts/${postId}`);
         const data = await response.json();
         setPostDetail(data);
       } catch (error) {
@@ -40,7 +39,7 @@ const PostDetailPage: React.FC = () => {
     // 해당 게시글의 댓글들을 가져옵니다.
     const fetchComments = async () => {
       try {
-        const response = await fetch(`http://43.203.209.74:3001/comments?post_id=${postId}`);
+        const response = await fetch(`http://localhost:3001/comments?post_id=${postId}`);
         const data = await response.json();
         setComments(data);
       } catch (error) {
@@ -56,7 +55,7 @@ const PostDetailPage: React.FC = () => {
     if (!userContext?.user) return;
 
     try {
-      const response = await fetch('http://43.203.209.74:3001/comments', {
+      const response = await fetch('http://localhost:3001/comments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,27 +81,19 @@ const PostDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="main-content">
-      <div className="post-widgets">
-        <h1 className="post-title">{postDetail?.title}</h1>
-        <p className="post-content">{postDetail?.content}</p>
-        {postDetail?.image_url && <img src={postDetail.image_url} alt="Post" className="post-image" />}
-        <hr />
-        <br />
+    <div>
+      <h1>{postDetail?.title}</h1>
+      <p>{postDetail?.content}</p>
+      <div>
         <h2>Comments</h2>
-        <div className="comments-section">
-          {comments.map((comment) => (
-            <div key={comment.comment_id} className="comment">
-              <p>{comment.content}</p>
-              <span> {comment.name}</span>
-              <span>{new Date(comment.timestamp).toLocaleString()}</span>
-            </div>
-          ))}
-          <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
-          <button onClick={handleCommentSubmit} className="post-button">
-            Submit Comment
-          </button>
-        </div>
+        {comments.map((comment) => (
+          <div key={comment.comment_id}>
+            <p>{comment.content}</p>
+            <span>{new Date(comment.timestamp).toLocaleString()}</span>
+          </div>
+        ))}
+        <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
+        <button onClick={handleCommentSubmit}>Submit Comment</button>
       </div>
     </div>
   );
