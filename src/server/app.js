@@ -212,9 +212,16 @@ app.get('/posts/:postId', (req, res) => {
 });
 
 // 댓글 랜더링 API
-app.get('/api/comments', (req, res) => {
-  const { post_id } = req.query;
+app.get('/comments', (req, res) => {
+  // 쿼리 파라미터에서 post_id를 추출합니다.
+  const post_id = req.query.post_id;
 
+  if (!post_id) {
+    // post_id가 없는 경우, 클라이언트에게 에러 메시지를 보냅니다.
+    return res.status(400).send('post_id query parameter is required');
+  }
+
+  // 데이터베이스 쿼리를 준비합니다.
   const query = `
     SELECT Comments.comment_id, Comments.content, Comments.timestamp, Users.username
     FROM Comments
@@ -223,18 +230,21 @@ app.get('/api/comments', (req, res) => {
     ORDER BY Comments.timestamp DESC
   `;
 
+  // 데이터베이스 쿼리를 실행합니다.
   db.query(query, [post_id], (error, comments) => {
     if (error) {
+      // 쿼리 실행 중 에러가 발생한 경우, 에러 메시지를 보냅니다.
       console.error('Error fetching comments:', error);
       return res.status(500).send('Server error');
     }
 
+    // 쿼리 결과를 클라이언트에게 JSON 형식으로 보냅니다.
     res.json(comments);
   });
 });
 
 //댓글 추가 API
-app.post('/api/comments', (req, res) => {
+app.post('/comments', (req, res) => {
   const { post_id, user_id, content } = req.body;
 
   const insertQuery = `
