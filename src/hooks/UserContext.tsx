@@ -2,7 +2,6 @@ import React, { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 interface User {
   user: User | null;
   user_id: number;
@@ -33,7 +32,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}:3001/api/login`, { username, password });
+      const response = await axios.post(`http://43.203.209.74:3001/api/login`, { username, password });
       if (response.data.success) {
         setUser(response.data.user);
       } else {
