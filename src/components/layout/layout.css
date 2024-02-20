@@ -299,9 +299,12 @@ body {
 }
 
 .post-list {
+  width: 70vw;
   display: flex;
   margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  justify-content: space-around;
+  align-items: center;
 }
