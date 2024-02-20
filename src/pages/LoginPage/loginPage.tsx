@@ -18,7 +18,7 @@ const LoginPage: React.FC = () => {
       navigate('/'); // 로그인 성공 시 메인 페이지로 이동
     } catch (error) {
       console.error('로그인 요청 실패', error);
-      alert('로그인 요청 실패');
+      alert('로그인 실패');
     }
   };
 
