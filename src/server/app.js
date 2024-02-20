@@ -185,6 +185,35 @@ ORDER BY Posts.timestamp DESC;
   });
 });
 
+//? 게시글 상세보기
+
+app.get('/api/posts/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT Posts.post_id, Posts.title, Posts.content, Posts.image_url, Posts.timestamp, Users.username
+    FROM Posts
+    JOIN Users ON Posts.user_id = Users.user_id
+    WHERE Posts.post_id = ?
+  `;
+
+  db.query(query, [id], (error, results) => {
+    if (error) {
+      console.error('Error fetching post details:', error);
+      return res.status(500).send('Server error');
+    }
+
+    if (results.length > 0) {
+      const post = results[0];
+      // 추가된 부분: 이미지 URL이 있으면 전송, 없으면 null 처리
+      post.image_url = post.image_url || null;
+      res.json(post);
+    } else {
+      res.status(404).send('Post not found');
+    }
+  });
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
