@@ -167,7 +167,7 @@ app.get('/posts', (req, res) => {
   SELECT 
   Posts.post_id, 
   Posts.title, 
-  Users.username, 
+  Users.name, 
   Posts.timestamp
 FROM Posts
 JOIN Users ON Posts.user_id = Users.user_id
@@ -222,7 +222,7 @@ app.get('/comments', (req, res) => {
 
   // 데이터베이스 쿼리를 준비합니다.
   const query = `
-    SELECT Comments.comment_id, Comments.content, Comments.timestamp, Users.username
+    SELECT Comments.comment_id, Comments.content, Comments.timestamp, Users.name
     FROM Comments
     JOIN Users ON Comments.user_id = Users.user_id
     WHERE Comments.post_id = ?
