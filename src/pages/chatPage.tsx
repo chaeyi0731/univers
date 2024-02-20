@@ -19,7 +19,7 @@ interface Message {
 let socket: Socket | any;
 
 if (process.env.REACT_APP_ENABLE_SOCKET === 'true') {
-  socket = io(`${process.env.REACT_APP_API_BASE_URL}:3001/chatting`, { transports: ['websocket'] });
+  socket = io(`http://43.203.209.74:3001/chatting`, { transports: ['websocket'] });
 
   socket.on('chat message', (msg: any) => {
     console.log(msg);
