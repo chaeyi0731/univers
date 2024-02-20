@@ -76,7 +76,7 @@ body {
 /* main 컨텐츠 관련 스타일링 */
 .main-content {
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -343,7 +343,7 @@ tr:hover {
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  background-color: #1b1a1a8a;
+  background-color: #0a0a0ade;
 }
 
 .post-content {
@@ -410,7 +410,6 @@ textarea {
 
 .post-widgets {
   width: 80vw;
-  height: auto;
   overflow: auto;
 
   background-color: #1b1a1a8a;
@@ -422,10 +421,10 @@ textarea {
   flex-direction: column;
   max-width: 600px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 50px;
   border: 1px solid #e1e1e1;
   border-radius: 8px;
-  background: #fff;
+  background: #1b1a1a8a;
 }
 
 .createPostFormLabel {
