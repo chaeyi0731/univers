@@ -17,7 +17,7 @@ interface Message {
 }
 
 // 환경 변수 검사 없이 소켓 연결을 직접 초기화합니다.
-const socket: Socket = io(`http://43.203.209.74:3001/chatting`, { transports: ['websocket'] });
+const socket: Socket = io(`http://localhost:3001/chatting`, { transports: ['websocket'] });
 
 socket.on('chat message', (msg: any) => {
   console.log(msg);
