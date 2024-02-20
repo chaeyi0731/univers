@@ -24,6 +24,8 @@ const PostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const userContext = useContext(UserContext);
 
+  console.log(postId);
+
   useEffect(() => {
     // 게시글 상세 정보를 가져옵니다.
     const fetchPostDetail = async () => {
