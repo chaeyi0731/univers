@@ -404,8 +404,8 @@ textarea {
   cursor: pointer;
 }
 
-.post-button:hover{
-  background-color: #490a89;;
+.post-button:hover {
+  background-color: #490a89;
 }
 
 .post-widgets {
@@ -414,4 +414,46 @@ textarea {
   overflow: auto;
 
   background-color: #1b1a1a8a;
+}
+
+/* 게시글 생성 페이지 전용 스타일 */
+.createPostFormContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.createPostFormLabel {
+  margin: 10px 0;
+}
+
+.createPostFormInput,
+.createPostFormTextarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.createPostFormInput[type='file'] {
+  border: none;
+}
+
+.createPostFormButton {
+  padding: 10px 20px;
+  background-color: #8000ff4a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.createPostFormButton:hover {
+  background-color: #490a89;
 }
