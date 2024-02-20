@@ -11,17 +11,23 @@ interface Post {
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
 
+  const handleRowClick = useCallback(
+    (postId: number) => {
+      navigate(`/post/${postId}`);
+    },
+    [navigate]
+  );
+
   useEffect(() => {
-    // userContext가 유효한지 확인
-    if (!userContext || !userContext.user) {
+    if (!userContext?.user) {
       navigate('/login');
       return;
     }
 
-    // 포스트 데이터 가져오기
     const fetchPosts = async () => {
       try {
         const response = await fetch('http://localhost:3001/posts');
@@ -32,17 +38,19 @@ const PostPage: React.FC = () => {
         setPosts(data);
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
+        setError('Failed to load posts.');
       }
     };
 
     fetchPosts();
-  }, [navigate, userContext]);
+  }, [userContext, navigate]);
 
   return (
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
+          {error && <p className="error">{error}</p>}
           {userContext?.user && (
             <Link to="/create-post">
               <button>게시글 작성</button>
@@ -59,11 +67,9 @@ const PostPage: React.FC = () => {
             </thead>
             <tbody>
               {posts.map((post, index) => (
-                <tr key={index}>
+                <tr key={post.id} onClick={() => handleRowClick(post.id)} style={{ cursor: 'pointer' }}>
                   <td>{index + 1}</td>
-                  <td>
-                    <Link to={`/post/${post.id}`}>{post.title}</Link>
-                  </td>
+                  <td>{post.title}</td>
                   <td>{post.username}</td>
                   <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
                 </tr>
