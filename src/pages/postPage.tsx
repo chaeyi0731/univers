@@ -49,7 +49,7 @@ const PostPage: React.FC = () => {
             </Link>
           )}
           {posts.map((post, index) => (
-            <div key={index}>
+            <div key={index} className="post-list">
               <h2>
                 <Link to={`/post/${post.id}`}>{post.title}</Link>
               </h2>
