@@ -38,7 +38,7 @@ const PostPage: React.FC = () => {
     fetchPosts();
   }, [navigate, userContext]);
 
-  return(
+  return (
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
@@ -48,15 +48,28 @@ const PostPage: React.FC = () => {
               <button>게시글 작성</button>
             </Link>
           )}
-          {posts.map((post, index) => (
-            <div key={index} className="post-list">
-              <h2>
-                <Link to={`/post/${post.id}`}>{post.title}</Link>
-              </h2>
-              <p>
-                작성자: {post.username}, 작성시간: {new Date(post.timestamp).toLocaleString()}
-              </p>
-          ))}
+          <table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성시간</th>
+              </tr>
+            </thead>
+            <tbody>
+              {posts.map((post, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <Link to={`/post/${post.id}`}>{post.title}</Link>
+                  </td>
+                  <td>{post.username}</td>
+                  <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
