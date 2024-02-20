@@ -35,7 +35,12 @@ const PostPage: React.FC = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setPosts(data);
+        // 각 post의 id를 숫자로 변환
+        const postsWithCorrectId = data.map((post: any) => ({
+          ...post,
+          post_id: Number(post.post_id),
+        }));
+        setPosts(postsWithCorrectId);
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
         setError('Failed to load posts.');
