@@ -43,6 +43,11 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
+          {userContext?.user && (
+            <Link to="/create-post">
+              <button>게시글 작성</button>
+            </Link>
+          )}
           {posts.map((post, index) => (
             <div key={index}>
               <h2>
@@ -53,32 +58,6 @@ const PostPage: React.FC = () => {
               </p>
             </div>
           ))}
-
-          {userContext?.user && (
-            <Link to="/create-post">
-              <button>게시글 작성</button>
-            </Link>
-          )}
-          <table>
-            <thead>
-              <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성시간</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts.map((post, index) => (
-                <tr key={post.id} onClick={() => handleRowClick(post.id)} style={{ cursor: 'pointer' }}>
-                  <td>{index + 1}</td>
-                  <td>{post.title}</td>
-                  <td>{post.username}</td>
-                  <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
