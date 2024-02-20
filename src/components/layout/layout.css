@@ -297,3 +297,11 @@ body {
   align-items: center;
   overflow-y: auto;
 }
+
+.post-list {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
