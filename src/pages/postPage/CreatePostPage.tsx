@@ -38,7 +38,7 @@ const CreatePostPage: React.FC = () => {
     formData.append('user_id', user.user_id.toString()); // 사용자 ID를 문자열로 변환하여 추가
 
     try {
-      const response = await fetch(`http://localhost:3001/create-post`, {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}:3001/create-post`, {
         method: 'POST',
         body: formData,
       });
