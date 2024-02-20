@@ -38,7 +38,7 @@ const PostPage: React.FC = () => {
     fetchPosts();
   }, [navigate, userContext]);
 
-  return (
+  return(
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
