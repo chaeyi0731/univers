@@ -43,6 +43,11 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
+          {userContext?.user && (
+            <Link to="/create-post">
+              <button>게시글 작성</button>
+            </Link>
+          )}
           {posts.map((post, index) => (
             <div key={index}>
               <h2>
@@ -53,12 +58,6 @@ const PostPage: React.FC = () => {
               </p>
             </div>
           ))}
-
-          {userContext?.user && (
-            <Link to="/create-post">
-              <button>게시글 작성</button>
-            </Link>
-          )}
         </div>
       </div>
     </div>
