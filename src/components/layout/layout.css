@@ -338,3 +338,80 @@ th {
 tr:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+.post-title {
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #1b1a1a8a;
+}
+
+.post-content {
+  margin-bottom: 20px;
+}
+
+.post-image {
+  display: block;
+  max-width: 60%;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 10px;
+}
+
+.comments-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.comment {
+  width: 70vw;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: end;
+}
+
+.comment span {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #ffffff;
+}
+
+textarea {
+  width: 50vw;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-button {
+  display: block;
+  width: 52vw;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #8000ff4a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post-button:hover{
+  background-color: #490a89;;
+}
+
+.post-widgets {
+  width: 80vw;
+  height: auto;
+  overflow: auto;
+
+  background-color: #1b1a1a8a;
+}
