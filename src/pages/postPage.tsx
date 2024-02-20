@@ -5,7 +5,7 @@ import { UserContext } from '../hooks/UserContext';
 interface Post {
   post_id: number;
   title: string;
-  username: string;
+  name: string;
   timestamp: string;
 }
 
@@ -75,7 +75,7 @@ const PostPage: React.FC = () => {
                 <tr key={post.post_id} onClick={() => handleRowClick(post.post_id)} style={{ cursor: 'pointer' }}>
                   <td>{index + 1}</td>
                   <td>{post.title}</td>
-                  <td>{post.username}</td>
+                  <td>{post.name}</td>
                   <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
                 </tr>
               ))}
