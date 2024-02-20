@@ -8,56 +8,20 @@ const server = http.createServer(app);
 const cors = require('cors');
 const mysql = require('mysql');
 const multer = require('multer');
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-const AWS = require('aws-sdk');
->>>>>>> 03ceb55 (:pencil2: Rename: 변수명 변경)
-=======
->>>>>>> 97a8a7b (:bug: Fix: 스토리지 사용하지 않아서 삭제)
 const { v4: uuidv4 } = require('uuid');
-<<<<<<< HEAD
-<<<<<<< HEAD
 const AWS = require('aws-sdk');
 const fs = require('fs');
 
 AWS.config.update({
-=======
-const AWS = require('aws-sdk');
-const fs = require('fs');
-
-<<<<<<< HEAD
-const s3 = new AWS.S3({
->>>>>>> 2199c46 (:hammer: Modify: s3 사용)
-=======
-AWS.config.update({
->>>>>>> e6f4545 (:hammer: Modify: 여러가지 문제 해결)
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
-<<<<<<< HEAD
-
-const s3 = new AWS.S3();
-=======
-const { exec } = require('child_process');
->>>>>>> fca82b4 (:bug: Fix: 게시글을 라이트세일 인스턴스에서 url을 받아와서 저장하기)
 
 const s3 = new AWS.S3();
 
 const upload = multer({ dest: 'uploads/' });
 
-<<<<<<< HEAD
-=======
-const upload = multer({ dest: 'uploads/' });
-
-// CORS 설정
->>>>>>> 03ceb55 (:pencil2: Rename: 변수명 변경)
-=======
-
-const upload = multer({ dest: 'uploads/' });
-
->>>>>>> 2199c46 (:hammer: Modify: s3 사용)
 app.use(cors());
 app.use(express.json());
 
@@ -103,23 +67,9 @@ app.post('/api/login', (req, res) => {
       return;
     }
     const user = results[0];
-<<<<<<< HEAD
-<<<<<<< HEAD
     if (password !== user.password) {
       res.status(401).send('비밀번호가 일치하지 않습니다.');
       return;
-=======
-
-    // 비밀번호 비교
-    if (password !== user.password) {
-      // 수정: 비밀번호를 일치 여부로 직접 비교
-      return res.status(401).send('비밀번호가 일치하지 않습니다.');
->>>>>>> adb757e (:bug: Fix : 사소한 버그정리)
-=======
-    if (password !== user.password) {
-      res.status(401).send('비밀번호가 일치하지 않습니다.');
-      return;
->>>>>>> 2199c46 (:hammer: Modify: s3 사용)
     }
     res.send({ success: true, user });
   });
@@ -171,55 +121,6 @@ app.get('/api/chat', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-app.post('/create-post', upload.single('image'), (req, res) => {
-  const { title, content, user_id } = req.body; // user_id 추가
-  let imageUrl = null; // 이미지 URL 초기화
-
-  if (req.file) {
-    const image = req.file;
-    const fileContent = fs.readFileSync(image.path);
-    const filename = `${uuidv4()}-${image.originalname}`;
-    s3.upload(
-      {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `image/${filename}`,
-        Body: fileContent,
-        ACL: 'public-read',
-      },
-      (error, data) => {
-        if (error) {
-          console.error('Error uploading image to S3:', error);
-          res.status(500).send('Failed to upload image to S3');
-          return;
-        }
-        imageUrl = data.Location;
-        insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
-      }
-    );
-  } else {
-    insertPost(title, content, null, user_id, res); // 이미지가 없는 경우
-  }
-});
-
-function insertPost(title, content, imageUrl, user_id, res) {
-  const query = 'INSERT INTO Posts (title, content, image_url, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())';
-  db.query(query, [title, content, imageUrl, user_id], (error, results) => {
-    if (error) {
-      console.error('게시글 삽입 중 에러:', error);
-      res.status(500).send('게시글을 생성하는 동안 오류가 발생했습니다.');
-      return;
-    }
-    res.json({ success: true, message: '게시글이 성공적으로 작성되었습니다.', imageUrl });
-  });
-}
-=======
->>>>>>> 2199c46 (:hammer: Modify: s3 사용)
-
-});
-=======
->>>>>>> e6f4545 (:hammer: Modify: 여러가지 문제 해결)
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body; // user_id 추가
   let imageUrl = null; // 이미지 URL 초기화
