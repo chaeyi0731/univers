@@ -165,14 +165,15 @@ function insertPost(title, content, imageUrl, user_id, res) {
 
 app.get('/posts', (req, res) => {
   const query = `
-    SELECT 
-      Posts.post_id, 
-      Posts.title, 
-      Users.username, 
-      Posts.timestamp
-    FROM Posts
-    JOIN Users ON Posts.user_id = User.id
-    ORDER BY Posts.timestamp DESC
+  SELECT 
+  Posts.post_id, 
+  Posts.title, 
+  Users.username, 
+  Posts.timestamp
+FROM Posts
+JOIN Users ON Posts.user_id = Users.user_id
+ORDER BY Posts.timestamp DESC;
+
   `;
 
   db.query(query, (err, results) => {
