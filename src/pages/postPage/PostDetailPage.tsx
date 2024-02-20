@@ -15,16 +15,14 @@ interface PostDetail {
   post_id: number;
   title: string;
   content: string;
+  image_url: string | null;
 }
-
 const PostDetailPage: React.FC = () => {
   const [postDetail, setPostDetail] = useState<PostDetail | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>('');
   const { postId } = useParams<{ postId: string }>();
   const userContext = useContext(UserContext);
-
-  console.log(postId);
 
   useEffect(() => {
     // 게시글 상세 정보를 가져옵니다.
@@ -87,6 +85,7 @@ const PostDetailPage: React.FC = () => {
       <div>
         <h1>{postDetail?.title}</h1>
         <p>{postDetail?.content}</p>
+        {postDetail?.image_url && <img src={postDetail.image_url} alt="Post" />}
         <div>
           <h2>Comments</h2>
           {comments.map((comment) => (
