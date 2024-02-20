@@ -171,7 +171,7 @@ app.get('/posts', (req, res) => {
       Users.username, 
       Posts.timestamp
     FROM Posts
-    JOIN Users ON Posts.user_id = Users.id
+    JOIN Users ON Posts.user_id = User.id
     ORDER BY Posts.timestamp DESC
   `;
 
