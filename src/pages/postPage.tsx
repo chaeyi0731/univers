@@ -38,7 +38,7 @@ const PostPage: React.FC = () => {
     fetchPosts();
   }, [navigate, userContext]);
 
-  return(
+  return (
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
@@ -65,7 +65,7 @@ const PostPage: React.FC = () => {
                     <Link to={`/post/${post.id}`}>{post.title}</Link>
                   </td>
                   <td>{post.username}</td>
-                  <td>{new Date(post.timestamp).toLocaleString()}</td>
+                  <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
                 </tr>
               ))}
             </tbody>
