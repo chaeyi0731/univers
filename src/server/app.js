@@ -262,19 +262,24 @@ function insertPost(title, content, imageUrl, user_id, res) {
   });
 }
 
-app.get('/posts', async (req, res) => {
+app.get('/posts', (req, res) => {
   const query = `
     SELECT 
-      p.id, p.title, u.username, p.timestamp
-    FROM Posts p
-    JOIN Users u ON p.user_id = u.id
-    ORDER BY p.timestamp DESC
+      Posts.post_id, 
+      Posts.title, 
+      Users.username, 
+      Posts.timestamp
+    FROM Posts
+    JOIN Users ON Posts.user_id = Users.id
+    ORDER BY Posts.timestamp DESC
   `;
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error(error);
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
       return res.status(500).send('Server error');
     }
+
     res.json(results);
   });
 });
