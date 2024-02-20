@@ -1,4 +1,3 @@
-// ChatPage.tsx
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +15,12 @@ interface Message {
   timestamp: string;
 }
 
-let socket: Socket | any;
+// 환경 변수 검사 없이 소켓 연결을 직접 초기화합니다.
+const socket: Socket = io(`http://localhost:3001/chatting`, { transports: ['websocket'] });
 
-if (process.env.REACT_APP_ENABLE_SOCKET === 'true') {
-  socket = io(`http://43.203.209.74:3001/chatting`, { transports: ['websocket'] });
-
-  socket.on('chat message', (msg: any) => {
-    console.log(msg);
-  });
-}
+socket.on('chat message', (msg: any) => {
+  console.log(msg);
+});
 
 const ChatPage: React.FC = () => {
   const { user } = useContext(UserContext) as { user: User };
@@ -43,7 +39,7 @@ const ChatPage: React.FC = () => {
   };
 
   const handleSendClick = () => {
-    if (!user || !user.username || !socket) {
+    if (!user || !user.username) {
       console.error('로그인한 사용자만 메시지를 보낼 수 있습니다.');
       return;
     }
