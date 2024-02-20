@@ -29,7 +29,7 @@ const PostDetailPage: React.FC = () => {
     // 게시글 상세 정보를 가져옵니다.
     const fetchPostDetail = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}:3001/posts/${postId}`);
+        const response = await fetch(`http://43.203.209.74:3001/posts/${postId}`);
         const data = await response.json();
         setPostDetail(data);
       } catch (error) {
