@@ -2,6 +2,7 @@ import React, { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+
 interface User {
   user: User | null;
   user_id: number;
@@ -45,7 +46,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}:3001/api/logout`);
+      await axios.post(`http://43.203.209.74:3001/api/logout`);
       setUser(null); // 로그아웃 시 user 상태를 초기화
       navigate('/'); // 메인 페이지로 이동
     } catch (error) {
