@@ -83,21 +83,25 @@ const PostDetailPage: React.FC = () => {
 
   return (
     <div className="main-content">
-      <div>
-        <h1>{postDetail?.title}</h1>
-        <p>{postDetail?.content}</p>
-        {postDetail?.image_url && <img src={postDetail.image_url} alt="Post" />}
-        <div>
-          <h2>Comments</h2>
+      <div className="post-widgets">
+        <h1 className="post-title">{postDetail?.title}</h1>
+        <p className="post-content">{postDetail?.content}</p>
+        {postDetail?.image_url && <img src={postDetail.image_url} alt="Post" className="post-image" />}
+        <hr />
+        <br />
+        <h2>Comments</h2>
+        <div className="comments-section">
           {comments.map((comment) => (
-            <div key={comment.comment_id}>
+            <div key={comment.comment_id} className="comment">
               <p>{comment.content}</p>
-              <span>Written by: {comment.name}</span>
+              <span> {comment.name}</span>
               <span>{new Date(comment.timestamp).toLocaleString()}</span>
             </div>
           ))}
           <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
-          <button onClick={handleCommentSubmit}>Submit Comment</button>
+          <button onClick={handleCommentSubmit} className="post-button">
+            Submit Comment
+          </button>
         </div>
       </div>
     </div>
