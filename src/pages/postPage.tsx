@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
 
 interface Post {
-  id: number;
+  post_id: number;
   title: string;
   username: string;
   timestamp: string;
@@ -16,8 +16,8 @@ const PostPage: React.FC = () => {
   const userContext = useContext(UserContext);
 
   const handleRowClick = useCallback(
-    (postId: number) => {
-      navigate(`/post/${postId}`);
+    (post_id: number) => {
+      navigate(`/post/${post_id}`);
     },
     [navigate]
   );
@@ -72,7 +72,7 @@ const PostPage: React.FC = () => {
             </thead>
             <tbody>
               {posts.map((post, index) => (
-                <tr key={post.id} onClick={() => handleRowClick(post.id)} style={{ cursor: 'pointer' }}>
+                <tr key={post.post_id} onClick={() => handleRowClick(post.post_id)} style={{ cursor: 'pointer' }}>
                   <td>{index + 1}</td>
                   <td>{post.title}</td>
                   <td>{post.username}</td>
