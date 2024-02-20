@@ -219,6 +219,61 @@ app.get('/api/posts/:id', (req, res) => {
   });
 });
 
+// 댓글 랜더링 API
+app.get('/api/comments', (req, res) => {
+  const { post_id } = req.query;
+
+  const query = `
+    SELECT Comments.comment_id, Comments.content, Comments.timestamp, Users.username
+    FROM Comments
+    JOIN Users ON Comments.user_id = Users.user_id
+    WHERE Comments.post_id = ?
+    ORDER BY Comments.timestamp DESC
+  `;
+
+  db.query(query, [post_id], (error, comments) => {
+    if (error) {
+      console.error('Error fetching comments:', error);
+      return res.status(500).send('Server error');
+    }
+
+    res.json(comments);
+  });
+});
+
+//댓글 추가 API
+app.post('/api/comments', (req, res) => {
+  const { post_id, user_id, content } = req.body;
+
+  const insertQuery = `
+    INSERT INTO Comments (post_id, user_id, content, timestamp)
+    VALUES (?, ?, ?, NOW())
+  `;
+
+  db.query(insertQuery, [post_id, user_id, content], (error, result) => {
+    if (error) {
+      console.error('Error posting new comment:', error);
+      return res.status(500).send('Server error');
+    }
+
+    const commentId = result.insertId;
+    const selectQuery = `
+      SELECT comment_id, content, timestamp, user_id
+      FROM Comments
+      WHERE comment_id = ?
+    `;
+
+    db.query(selectQuery, [commentId], (error, comments) => {
+      if (error) {
+        console.error('Error fetching new comment:', error);
+        return res.status(500).send('Server error');
+      }
+
+      res.json(comments[0]);
+    });
+  });
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
