@@ -46,5 +46,11 @@ interface UserInfo {
   phoneNumber: string;
   address: string;
 }
+interface Post {
+  post_id: number;
+  title: string;
+  name: string;
+  timestamp: string;
+}
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType };
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post };
