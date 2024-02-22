@@ -1,80 +1,28 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
-import { Post } from '../components/common/interfaces/interfaces';
+import usePosts from '../hooks/usePosts';
+import PostTable from '../components/common/PostTable';
 
 const PostPage: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
   const userContext = useContext(UserContext);
+  const navigate = useNavigate();
+  const { posts, error, isLoading } = usePosts(userContext!, navigate);
 
-  const handleRowClick = useCallback(
-    (post_id: number) => {
-      navigate(`/post/${post_id}`);
-    },
-    [navigate]
-  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    if (!userContext?.user) {
-      navigate('/login');
-      return;
-    }
-
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        // 각 post의 id를 숫자로 변환
-        const postsWithCorrectId = data.map((post: any) => ({
-          ...post,
-          post_id: Number(post.post_id),
-        }));
-        setPosts(postsWithCorrectId);
-      } catch (error) {
-        console.error('There was a problem with your fetch operation:', error);
-        setError('Failed to load posts.');
-      }
-    };
-
-    fetchPosts();
-  }, [userContext, navigate]);
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="main-content">
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
-          {error && <p className="error">{error}</p>}
-          {userContext?.user && (
-            <Link to="/create-post">
-              <button>게시글 작성</button>
-            </Link>
-          )}
-          <table>
-            <thead>
-              <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성시간</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts.map((post, index) => (
-                <tr key={post.post_id} onClick={() => handleRowClick(post.post_id)} style={{ cursor: 'pointer' }}>
-                  <td>{index + 1}</td>
-                  <td>{post.title}</td>
-                  <td>{post.name}</td>
-                  <td>{new Date(post.timestamp).toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <PostTable posts={posts} onRowClick={(postId) => navigate(`/post/${postId}`)} />
         </div>
       </div>
     </div>
