@@ -101,7 +101,8 @@ io.on('connection', (socket) => {
 
     // 메시지를 데이터베이스에 저장
     const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, ?, ?)';
-    db.query(query, [msg.userName, msg.text, msg.timestamp, msg.user_id], (err, result) => {
+    // 여기서 msg.username으로 수정
+    db.query(query, [msg.username, msg.text, msg.timestamp, msg.user_id], (err, result) => {
       if (err) {
         console.error('Error saving message:', err);
         return;
@@ -109,18 +110,6 @@ io.on('connection', (socket) => {
       console.log('Message saved:', result);
       // 메시지를 모든 클라이언트에게 전송
       io.emit('chat message', msg);
-    });
-  });
-
-  // 이전 메시지 로딩 요청 처리
-  socket.on('request previous messages', () => {
-    const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error('Error fetching previous messages:', err);
-        return;
-      }
-      socket.emit('previous messages', results);
     });
   });
 });
