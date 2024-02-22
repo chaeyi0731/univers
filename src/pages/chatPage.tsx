@@ -3,18 +3,7 @@ import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
 import { io, Socket } from 'socket.io-client';
-
-interface User {
-  username: string;
-  name: string;
-  user_id: number;
-}
-
-interface Message {
-  username: string;
-  text: string;
-  timestamp: string;
-}
+import { User, Message } from '../components/common/interfaces/interfaces';
 
 const ChatPage: React.FC = () => {
   const { user } = useContext(UserContext) as { user: User };

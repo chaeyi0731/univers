@@ -1,13 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
-
-interface Post {
-  post_id: number;
-  title: string;
-  name: string;
-  timestamp: string;
-}
+import { Post } from '../components/common/interfaces/interfaces';
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
