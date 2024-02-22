@@ -53,4 +53,10 @@ interface Post {
   timestamp: string;
 }
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post };
+interface Apod {
+  title: string;
+  explanation: string;
+  url: string;
+}
+
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod };
