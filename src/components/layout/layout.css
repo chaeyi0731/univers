@@ -307,7 +307,7 @@ body {
 /* post 스타일링 */
 .postwidgets {
   width: 90vw;
-  height: 70vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
