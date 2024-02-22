@@ -87,36 +87,38 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://43.203.209.74:3001',
+    origin: 'http:localhost:3001',
     methods: ['GET', 'POST'], // 허용할 HTTP 메소드
-    credentials: true, // 쿠키 및 인증 헤더 허용
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-    const query = 'INSERT INTO chatMessage (userName, message, timestamp) VALUES (?, ?, ?)';
-    db.query(query, [msg.userName, msg.text, msg.timestamp], (err, result) => {
-      if (err) {
-        console.error('메시지 저장 중 오류 발생:', err);
-      } else {
-        console.log('메시지가 데이터베이스에 저장되었습니다:', result.insertId);
-      }
-    });
-  });
-  socket.on('disconnect', () => {
-    console.log('클라이언트가 연결을 끊었습니다:', socket.id);
+io.on('chat message', (msg) => {
+  // Users 테이블에서 user_id에 해당하는 username 조회
+  const userQuery = 'SELECT name FROM Users WHERE user_id = ?';
+  db.query(userQuery, [msg.user_id], (err, results) => {
+    if (err) throw err;
+    if (results.length > 0) {
+      const username = results[0].name; // 조회된 username
+      // ChatMessage 테이블에 메시지 저장
+      const insertQuery = 'INSERT INTO ChatMessage (username, message, timestamp) VALUES (?, ?, ?)';
+      db.query(insertQuery, [username, msg.text, msg.timestamp], (err, result) => {
+        if (err) throw err;
+        console.log('Message saved to database with username from Users table');
+        // 모든 클라이언트에게 메시지 전송
+        io.emit('chat message', { ...msg, username });
+      });
+    } else {
+      console.error('User not found');
+    }
   });
 });
 
-app.get('/api/chat', (req, res) => {
+app.get('/api/messages', (req, res) => {
   const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
   db.query(query, (err, results) => {
     if (err) {
-      console.error('메시지 로딩 중 오류 발생:', err);
-      res.status(500).send('서버 오류');
+      console.error('Error fetching messages:', err);
+      res.status(500).send('Internal Server Error');
       return;
     }
     res.json(results);
