@@ -35,7 +35,7 @@ const SignupPage: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/signup', userInfo);
+      await axios.post(`${process.env.REACT_APP_API_URL}/signup`, userInfo);
       alert('회원가입이 완료되었습니다.');
       window.location.href = '/';
     } catch (error: any) {
