@@ -2,22 +2,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../hooks/UserContext';
+import { Comment, PostDetail } from '../../components/common/interfaces/interfaces';
 
-interface Comment {
-  comment_id: number;
-  post_id: number;
-  user_id: number;
-  content: string;
-  timestamp: string;
-  name: string;
-}
-
-interface PostDetail {
-  post_id: number;
-  title: string;
-  content: string;
-  image_url: string | null;
-}
 const PostDetailPage: React.FC = () => {
   const [postDetail, setPostDetail] = useState<PostDetail | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
