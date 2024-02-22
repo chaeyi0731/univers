@@ -83,9 +83,10 @@ const ChatPage: React.FC = () => {
       <div className="widgets">
         <div className="chat-messages">
           {messages.map((msg, index) => (
-            <div key={index}>
-              <strong>{msg.username}: </strong>
-              {msg.text}
+            <div key={index} className="message-bubble">
+              <strong>
+                {msg.username}: {msg.text}
+              </strong>
             </div>
           ))}
         </div>
