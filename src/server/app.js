@@ -1,5 +1,4 @@
-//환경변수 가져오기
-require('dotenv').config();
+require('dotenv').config({ path: '../../.env' });
 
 const express = require('express');
 const app = express();
@@ -7,7 +6,6 @@ const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
 const multer = require('multer');
-const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const mysql = require('mysql');
@@ -87,7 +85,7 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://43.203.209.74:3001',
+    origin: `${process.env.REACT_APP_API_URL}`,
     methods: ['GET', 'POST'], // 허용할 HTTP 메소드
   },
 });
