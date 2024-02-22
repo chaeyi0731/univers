@@ -87,7 +87,7 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:3001',
+    origin: 'http://43.203.209.74:3001',
     methods: ['GET', 'POST'], // 허용할 HTTP 메소드
   },
 });
