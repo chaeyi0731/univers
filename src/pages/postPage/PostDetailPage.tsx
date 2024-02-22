@@ -29,7 +29,7 @@ const PostDetailPage: React.FC = () => {
     // 게시글 상세 정보를 가져옵니다.
     const fetchPostDetail = async () => {
       try {
-        const response = await fetch(`http://43.203.209.74:3001/posts/${postId}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}`);
         const data = await response.json();
         setPostDetail(data);
       } catch (error) {
@@ -40,7 +40,7 @@ const PostDetailPage: React.FC = () => {
     // 해당 게시글의 댓글들을 가져옵니다.
     const fetchComments = async () => {
       try {
-        const response = await fetch(`http://43.203.209.74:3001/comments?post_id=${postId}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/comments?post_id=${postId}`);
         const data = await response.json();
         setComments(data);
       } catch (error) {
@@ -56,7 +56,7 @@ const PostDetailPage: React.FC = () => {
     if (!userContext?.user) return;
 
     try {
-      const response = await fetch(`http://43.203.209.74:3001/comments`, {
+      const response = await fetch(`h${process.env.REACT_APP_API_URL}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
