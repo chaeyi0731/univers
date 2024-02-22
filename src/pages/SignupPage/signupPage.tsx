@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-interface UserInfo {
-  username: string;
-  password: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
-}
+import { UserInfo } from '../../components/common/interfaces/interfaces';
 
 const SignupPage: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
