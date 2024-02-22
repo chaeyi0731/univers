@@ -1,4 +1,5 @@
-import LoginPage from '../../../pages/LoginPage/loginPage';
+import { ReactNode } from 'react';
+
 interface Comment {
   comment_id: number;
   post_id: number;
@@ -58,5 +59,8 @@ interface Apod {
   explanation: string;
   url: string;
 }
+interface UserProviderProps {
+  children: ReactNode;
+}
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod };
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps };
