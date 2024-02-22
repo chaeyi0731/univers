@@ -16,9 +16,13 @@ interface PostDetail {
 }
 
 interface User {
-  username: string;
-  name: string;
+  user: User | null;
   user_id: number;
+  username: string;
+  password: string;
+  phone_number: string;
+  name: string;
+  address: string;
 }
 
 interface Message {
@@ -30,7 +34,11 @@ interface Message {
 interface LoginContextType {
   login: (username: string, password: string) => Promise<void>;
 }
-
+interface UserContextType {
+  user: User | null;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+}
 interface UserInfo {
   username: string;
   password: string;
@@ -39,4 +47,4 @@ interface UserInfo {
   address: string;
 }
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo };
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType };
