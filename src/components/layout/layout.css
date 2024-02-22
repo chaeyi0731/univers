@@ -76,7 +76,7 @@ body {
 /* main 컨텐츠 관련 스타일링 */
 .main-content {
   width: 100vw;
-  height: 80vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
