@@ -87,29 +87,41 @@ app.post('/api/logout', (req, res) => {
 
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http:localhost:3001',
+    origin: 'http://localhost:3001',
     methods: ['GET', 'POST'], // 허용할 HTTP 메소드
   },
 });
 
-io.on('chat message', (msg) => {
-  // Users 테이블에서 user_id에 해당하는 username 조회
-  const userQuery = 'SELECT name FROM Users WHERE user_id = ?';
-  db.query(userQuery, [msg.user_id], (err, results) => {
-    if (err) throw err;
-    if (results.length > 0) {
-      const username = results[0].name; // 조회된 username
-      // ChatMessage 테이블에 메시지 저장
-      const insertQuery = 'INSERT INTO ChatMessage (username, message, timestamp) VALUES (?, ?, ?)';
-      db.query(insertQuery, [username, msg.text, msg.timestamp], (err, result) => {
-        if (err) throw err;
-        console.log('Message saved to database with username from Users table');
-        // 모든 클라이언트에게 메시지 전송
-        io.emit('chat message', { ...msg, username });
-      });
-    } else {
-      console.error('User not found');
-    }
+// 클라이언트로부터 메시지를 받는 이벤트 리스너
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('chat message', (msg) => {
+    console.log('Message from user:', msg);
+
+    // 메시지를 데이터베이스에 저장
+    const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, ?, ?)';
+    db.query(query, [msg.userName, msg.text, msg.timestamp, msg.user_id], (err, result) => {
+      if (err) {
+        console.error('Error saving message:', err);
+        return;
+      }
+      console.log('Message saved:', result);
+      // 메시지를 모든 클라이언트에게 전송
+      io.emit('chat message', msg);
+    });
+  });
+
+  // 이전 메시지 로딩 요청 처리
+  socket.on('request previous messages', () => {
+    const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching previous messages:', err);
+        return;
+      }
+      socket.emit('previous messages', results);
+    });
   });
 });
 
@@ -124,6 +136,8 @@ app.get('/api/messages', (req, res) => {
     res.json(results);
   });
 });
+
+// 게시글 작성 api
 
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body; // user_id 추가
