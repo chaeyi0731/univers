@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCreatePostForm } from './UseCreatPostForm';
 import { InputField } from './InputField';
+import SubmitButton from './SubmitButton';
 
 export const CreatePage: React.FC = () => {
   const { title, content, handleTitleChange, handleContentChange, handleImageUpload, handleSubmit } = useCreatePostForm();
@@ -15,9 +16,7 @@ export const CreatePage: React.FC = () => {
             이미지 첨부:
             <input className="createPostFormInput" type="file" name="image" onChange={handleImageUpload} />
           </label>
-          <button className="createPostFormButton" type="submit">
-            게시글 작성
-          </button>
+          <SubmitButton />
         </form>
       </div>
     </div>
