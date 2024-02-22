@@ -1,12 +1,8 @@
 import React from 'react';
 
-interface SubmitButtonProps {
-  onSubmit: () => void;
-}
-
-const SubmitButton: React.FC<SubmitButtonProps> = ({ onSubmit }) => {
+const SubmitButton: React.FC = () => {
   return (
-    <button onClick={onSubmit} type="button">
+    <button className="createPostFormButton" type="submit">
       게시글 작성
     </button>
   );
