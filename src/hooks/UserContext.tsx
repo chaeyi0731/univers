@@ -1,22 +1,9 @@
 import React, { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { User, UserContextType } from '../components/common/interfaces/interfaces';
 
-interface User {
-  user: User | null;
-  user_id: number;
-  username: string;
-  password: string;
-  phone_number: string;
-  name: string;
-  address: string;
-}
 
-interface UserContextType {
-  user: User | null;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
 
 const initialUser: User | null = null; // 초기 user 상태를 null로 설정
 
