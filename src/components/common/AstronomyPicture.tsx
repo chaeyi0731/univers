@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Apod } from './interfaces/interfaces';
 
 // NASA의 APOD API로부터 받아올 데이터의 타입을 정의합니다.
-interface Apod {
-  title: string;
-  explanation: string;
-  url: string;
-}
 
 const AstronomyPicture: React.FC = () => {
   const [apod, setApod] = useState<Apod | null>(null);
