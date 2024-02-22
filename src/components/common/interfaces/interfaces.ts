@@ -1,3 +1,4 @@
+import LoginPage from '../../../pages/LoginPage/loginPage';
 interface Comment {
   comment_id: number;
   post_id: number;
@@ -26,4 +27,8 @@ interface Message {
   timestamp: string;
 }
 
-export type { Comment, PostDetail, User, Message };
+interface LoginContextType {
+  login: (username: string, password: string) => Promise<void>;
+}
+
+export type { Comment, PostDetail, User, Message, LoginContextType };
