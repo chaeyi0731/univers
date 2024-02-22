@@ -30,7 +30,7 @@ const PostPage: React.FC = () => {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`http://43.203.209.74:3001/posts`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
