@@ -31,4 +31,12 @@ interface LoginContextType {
   login: (username: string, password: string) => Promise<void>;
 }
 
-export type { Comment, PostDetail, User, Message, LoginContextType };
+interface UserInfo {
+  username: string;
+  password: string;
+  name: string;
+  phoneNumber: string;
+  address: string;
+}
+
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo };
