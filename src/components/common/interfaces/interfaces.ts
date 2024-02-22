@@ -14,4 +14,16 @@ interface PostDetail {
   image_url: string | null;
 }
 
-export type { Comment, PostDetail };
+interface User {
+  username: string;
+  name: string;
+  user_id: number;
+}
+
+interface Message {
+  username: string;
+  text: string;
+  timestamp: string;
+}
+
+export type { Comment, PostDetail, User, Message };
