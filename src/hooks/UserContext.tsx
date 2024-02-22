@@ -2,8 +2,8 @@ import React, { createContext, useState, ReactNode, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// 사용자 인터페이스
 interface User {
-  user: User | null;
   user_id: number;
   username: string;
   password: string;
@@ -12,22 +12,30 @@ interface User {
   address: string;
 }
 
+// UserContext 타입
 interface UserContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-const initialUser: User | null = null; // 초기 user 상태를 null로 설정
+// UserContext의 기본값 설정
+const defaultUserContext: UserContextType = {
+  user: null,
+  login: async () => {},
+  logout: async () => {},
+};
 
-export const UserContext = createContext<UserContextType | null>(null);
+// UserContext 생성
+export const UserContext = createContext<UserContextType>(defaultUserContext);
 
+// UserProvider 컴포넌트
 interface UserProviderProps {
   children: ReactNode;
 }
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(initialUser);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   const login = async (username: string, password: string) => {
@@ -53,5 +61,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     }
   };
 
+  // UserContext.Provider에 현재 상태와 함수들을 전달
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
 };
