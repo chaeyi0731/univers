@@ -1,12 +1,9 @@
-import { useState, useContext } from 'react';
-import { UserContext } from '../hooks/UserContext';
+import { useState } from 'react';
 
-function useCommentSubmit(postId: string) {
+function useCommentSubmit(postId: string, userId?: string) {
   const [newComment, setNewComment] = useState('');
-  const userContext = useContext(UserContext);
-
   const handleCommentSubmit = async () => {
-    if (!userContext?.user || !newComment.trim()) return;
+    if (!userId || !newComment.trim()) return;
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/comments`, {
@@ -16,17 +13,16 @@ function useCommentSubmit(postId: string) {
         },
         body: JSON.stringify({
           post_id: postId,
-          user_id: userContext.user.user_id,
+          user_id: userId,
           content: newComment,
         }),
       });
 
       if (response.ok) {
-        // 성공적으로 댓글이 추가되었다면, 필요한 상태 업데이트 또는 후속 조치를 여기에 구현
-        setNewComment(''); // 댓글 입력 필드 초기화
+        // 댓글 추가 후 성공 로직 처리
+        setNewComment(''); // 입력 필드 초기화
       } else {
-        // 에러 처리
-        console.error('Failed to post comment');
+        throw new Error('Failed to post comment');
       }
     } catch (error) {
       console.error('Error posting new comment:', error);
