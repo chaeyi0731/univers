@@ -1,21 +1,6 @@
 import { ReactNode } from 'react';
 
-interface Comment {
-  comment_id: number;
-  post_id: number;
-  user_id: number;
-  content: string;
-  timestamp: string;
-  name: string;
-}
-
-interface PostDetail {
-  post_id: number;
-  title: string;
-  content: string;
-  image_url: string | null;
-}
-
+//? 유저관련 interface
 interface User {
   user: User | null;
   user_id: number;
@@ -26,15 +11,6 @@ interface User {
   address: string;
 }
 
-interface Message {
-  username: string;
-  text: string;
-  timestamp: string;
-}
-
-interface LoginContextType {
-  login: (username: string, password: string) => Promise<void>;
-}
 interface UserContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
@@ -47,6 +23,47 @@ interface UserInfo {
   phoneNumber: string;
   address: string;
 }
+
+interface UserProviderProps {
+  children: ReactNode;
+}
+
+//? 로그인 관련 interface
+
+interface LoginContextType {
+  login: (username: string, password: string) => Promise<void>;
+}
+// ? 댓글 관련 interface
+interface Comment {
+  comment_id: number;
+  post_id: number;
+  user_id: number;
+  content: string;
+  timestamp: string;
+  name: string;
+}
+
+interface CommentsComponentProps {
+  comments: Comment[];
+  newComment: string;
+  setNewComment: React.Dispatch<React.SetStateAction<string>>;
+  handleCommentSubmit: () => Promise<void>;
+}
+
+//? Post 관련 interface
+interface PostDetail {
+  post_id: number;
+  title: string;
+  content: string;
+  image_url: string | null;
+}
+
+interface Message {
+  username: string;
+  text: string;
+  timestamp: string;
+}
+
 interface Post {
   post_id: number;
   title: string;
@@ -54,13 +71,11 @@ interface Post {
   timestamp: string;
 }
 
+//? universePage interface
 interface Apod {
   title: string;
   explanation: string;
   url: string;
 }
-interface UserProviderProps {
-  children: ReactNode;
-}
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps };
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps };
