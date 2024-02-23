@@ -7,11 +7,11 @@ import usePostDetail from '../../hooks/usePostDetail';
 import useCommentSubmit from '../../hooks/useCommentSubmit';
 
 const PostDetailPage: React.FC = () => {
-  const { postId } = useParams<{ postId: string }>();
-  const userContext = useContext(UserContext);
-
   // usePostDetail 커스텀 훅으로 게시글 상세 정보와 댓글 목록을 가져옵니다.
-  const { postDetail, comments, loading, error } = usePostDetail(postId);
+  const { postId } = useParams<{ postId?: string }>(); // postId가 undefined일 수 있음을 명시
+  const { postDetail, comments, loading } = usePostDetail(postId ?? ''); // postId가 undefined일 경우, 기본값으로 "" 사용
+
+  const userContext = useContext(UserContext);
 
   // useCommentSubmit 커스텀 훅으로 댓글 제출 로직을 처리합니다.
   const { newComment, setNewComment, handleCommentSubmit } = useCommentSubmit(postId, userContext?.user?.user_id);
