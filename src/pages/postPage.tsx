@@ -22,12 +22,9 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
-          {error && <p className="error">{error}</p>}
-          {userContext?.user && (
-            <Link to="/create-post">
-              <button>게시글 작성</button>
-            </Link>
-          )}
+          <Link to="/create-post">
+            <button>게시글 작성</button>
+          </Link>
           <PostTable posts={posts} onRowClick={(postId) => navigate(`/post/${postId}`)} />
         </div>
       </div>
