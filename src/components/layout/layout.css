@@ -5,6 +5,7 @@
 body {
   background-image: url('https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/background.png');
 }
+/* 헤더관련 */
 .header {
   width: 100vw;
   height: 10vh;
@@ -91,7 +92,7 @@ body {
   justify-content: space-around;
   align-items: center;
 }
-
+/* mainPage */
 .chat,
 .post,
 .universe {
@@ -155,6 +156,8 @@ body {
   overflow-y: auto;
 }
 
+/* universe */
+
 .universep {
   width: 70vw;
   text-align: justify;
@@ -167,6 +170,7 @@ body {
   background-position: center;
 }
 
+/* login */
 .login-widgets {
   width: 50vw;
   height: 75vh;
@@ -356,11 +360,12 @@ tr:hover {
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+/* 게시글 상세보기 */
 .post-title {
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  background-color: #1b1a1a8a;
+  background-color: #490a89;
 }
 
 .post-content {
@@ -376,11 +381,13 @@ tr:hover {
 }
 
 .comments-section {
-  margin-top: 20px;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .comment {
@@ -427,9 +434,8 @@ textarea {
 
 .post-widgets {
   width: 80vw;
-  height: auto;
+  height: 50vh;
   overflow: auto;
-
   background-color: #1b1a1a8a;
 }
 
