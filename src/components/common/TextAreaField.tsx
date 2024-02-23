@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextAreaFieldProps } from './common/interfaces/interfaces';
+import { TextAreaFieldProps } from './interfaces/interfaces';
 
 const TextAreaField: React.FC<TextAreaFieldProps> = ({ label, value, onChange }) => {
   return (
