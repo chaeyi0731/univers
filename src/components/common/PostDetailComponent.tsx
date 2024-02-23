@@ -10,7 +10,7 @@ const PostDetailComponent: React.FC<PostDetailComponentProps> = ({ postDetail })
   if (!postDetail) return null;
 
   return (
-    <div>
+    <div className="post-widgets">
       <h1 className="post-title">{postDetail.title}</h1>
       <p className="post-content">{postDetail.content}</p>
       {postDetail.image_url && <img src={postDetail.image_url} alt="Post" className="post-image" />}
