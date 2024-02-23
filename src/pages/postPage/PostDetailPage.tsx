@@ -1,94 +1,32 @@
-// PostDetailPage.jsx
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../hooks/UserContext';
-import { Comment, PostDetail } from '../../components/common/interfaces/interfaces';
+import PostDetailComponent from '../../components/common/PostDetailComponent';
+import CommentsComponent from '../../components/common/CommentsComponent'; // 경로 확인 필요
+import usePostDetail from '../../hooks/usePostDetail';
+import useCommentSubmit from '../../hooks/useCommentSubmit';
 
 const PostDetailPage: React.FC = () => {
-  const [postDetail, setPostDetail] = useState<PostDetail | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState<string>('');
-  const { postId } = useParams<{ postId: string }>();
+  // usePostDetail 커스텀 훅으로 게시글 상세 정보와 댓글 목록을 가져옵니다.
+  const { postId } = useParams<{ postId?: string }>(); // postId가 undefined일 수 있음을 명시
+  const { postDetail, comments, loading } = usePostDetail(postId ?? ''); // postId가 undefined일 경우, 기본값으로 "" 사용
+
   const userContext = useContext(UserContext);
 
-  useEffect(() => {
-    // 게시글 상세 정보를 가져옵니다.
-    const fetchPostDetail = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}`);
-        const data = await response.json();
-        setPostDetail(data);
-      } catch (error) {
-        console.error('Error fetching post detail:', error);
-      }
-    };
+  //? userId 매개변수를 useCommentSubmit 훅에 전달하기 전에 문자열로 변환 undefined 일시에 빈 문자열로 반환""
+  // useCommentSubmit 커스텀 훅으로 댓글 제출 로직을 처리합니다.
+  const { newComment, setNewComment, handleCommentSubmit } = useCommentSubmit(postId || '', `${userContext?.user?.user_id || ''}`);
 
-    // 해당 게시글의 댓글들을 가져옵니다.
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/comments?post_id=${postId}`);
-        const data = await response.json();
-        setComments(data);
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
-    };
-
-    fetchPostDetail();
-    fetchComments();
-  }, [postId]);
-
-  const handleCommentSubmit = async () => {
-    if (!userContext?.user) return;
-
-    try {
-      const response = await fetch(`h${process.env.REACT_APP_API_URL}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          post_id: postId,
-          user_id: userContext.user.user_id,
-          content: newComment,
-        }),
-      });
-
-      if (response.ok) {
-        // 댓글 추가 후 댓글 목록을 새로 고칩니다.
-        const newCommentData = await response.json();
-        setComments([...comments, newCommentData]);
-        setNewComment(''); // 입력 필드를 비웁니다.
-      } else {
-        throw new Error('Failed to post comment');
-      }
-    } catch (error) {
-      console.error('Error posting new comment:', error);
-    }
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="main-content">
-      <div className="post-widgets">
-        <h1 className="post-title">{postDetail?.title}</h1>
-        <p className="post-content">{postDetail?.content}</p>
-        {postDetail?.image_url && <img src={postDetail.image_url} alt="Post" className="post-image" />}
+      <div>
+        <PostDetailComponent postDetail={postDetail} />
         <hr />
-        <br />
-        <h2>Comments</h2>
-        <div className="comments-section">
-          {comments.map((comment) => (
-            <div key={comment.comment_id} className="comment">
-              <p>{comment.content}</p>
-              <span> {comment.name}</span>
-              <span>{new Date(comment.timestamp).toLocaleString()}</span>
-            </div>
-          ))}
-          <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Write a comment..." />
-          <button onClick={handleCommentSubmit} className="post-button">
-            Submit Comment
-          </button>
-        </div>
+        <CommentsComponent comments={comments} newComment={newComment} setNewComment={setNewComment} handleCommentSubmit={handleCommentSubmit} />
       </div>
     </div>
   );

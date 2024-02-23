@@ -25,6 +25,7 @@ const upload = multer({ dest: 'uploads/' });
 app.use(cors());
 app.use(express.json());
 
+//? db
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -32,6 +33,7 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
+//? db 연결 
 db.connect((err) => {
   if (err) {
     console.error('Database connection error:', err);
@@ -40,6 +42,7 @@ db.connect((err) => {
   console.log('Connected to the database.');
 });
 
+//? 회원가입 API
 app.post('/signup', async (req, res) => {
   const { username, password, name, phoneNumber, address } = req.body;
   const query = 'INSERT INTO Users (username, password, name, phone_number, address) VALUES (?, ?, ?, ?, ?)';
@@ -53,6 +56,7 @@ app.post('/signup', async (req, res) => {
   });
 });
 
+//? 로그인 API
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM Users WHERE username = ?';
@@ -75,6 +79,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+//? logout API
 app.post('/api/logout', (req, res) => {
   res.send({ success: true, message: 'Successfully logged out' });
 });
@@ -124,7 +129,7 @@ app.get('/api/messages', (req, res) => {
   });
 });
 
-// 게시글 작성 api
+//? 게시글 작성 api
 
 app.post('/create-post', upload.single('image'), (req, res) => {
   const { title, content, user_id } = req.body; // user_id 추가
@@ -216,7 +221,7 @@ app.get('/posts/:postId', (req, res) => {
   });
 });
 
-// 댓글 랜더링 API
+//? 댓글 랜더링 API
 app.get('/comments', (req, res) => {
   // 쿼리 파라미터에서 post_id를 추출합니다.
   const post_id = req.query.post_id;

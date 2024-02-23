@@ -1,17 +1,11 @@
-import React, { createContext, useState, ReactNode, FC } from 'react';
+import React, { createContext, useState, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { User, UserContextType } from '../components/common/interfaces/interfaces';
-
-
+import { User, UserContextType, UserProviderProps } from '../components/common/interfaces/interfaces';
 
 const initialUser: User | null = null; // 초기 user 상태를 null로 설정
 
 export const UserContext = createContext<UserContextType | null>(null);
-
-interface UserProviderProps {
-  children: ReactNode;
-}
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(initialUser);
