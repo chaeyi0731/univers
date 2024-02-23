@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../hooks/UserContext';
 import usePosts from '../hooks/usePosts';
 import PostTable from '../components/common/PostTable';
@@ -22,7 +22,12 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
-          <button>게시글 작성</button>
+          {error && <p className="error">{error}</p>}
+          {userContext?.user && (
+            <Link to="/create-post">
+              <button>게시글 작성</button>
+            </Link>
+          )}
           <PostTable posts={posts} onRowClick={(postId) => navigate(`/post/${postId}`)} />
         </div>
       </div>
