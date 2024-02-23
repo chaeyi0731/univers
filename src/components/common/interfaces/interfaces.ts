@@ -91,5 +91,25 @@ interface PostTitleFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
   type?: 'text' | 'textarea';
 }
+interface TextAreaFieldProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps, FileUploadFieldProps, PostTitleFieldProps };
+export type {
+  Comment,
+  PostDetail,
+  User,
+  Message,
+  LoginContextType,
+  UserInfo,
+  UserContextType,
+  Post,
+  Apod,
+  UserProviderProps,
+  CommentsComponentProps,
+  FileUploadFieldProps,
+  PostTitleFieldProps,
+  TextAreaFieldProps,
+};
