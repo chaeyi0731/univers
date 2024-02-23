@@ -12,17 +12,13 @@ const PostDetailPage: React.FC = () => {
   const { postDetail, comments, loading } = usePostDetail(postId ?? ''); // postId가 undefined일 경우, 기본값으로 "" 사용
 
   const userContext = useContext(UserContext);
- 
+
   //? userId 매개변수를 useCommentSubmit 훅에 전달하기 전에 문자열로 변환 undefined 일시에 빈 문자열로 반환""
   // useCommentSubmit 커스텀 훅으로 댓글 제출 로직을 처리합니다.
   const { newComment, setNewComment, handleCommentSubmit } = useCommentSubmit(postId || '', `${userContext?.user?.user_id || ''}`);
 
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
   }
 
   return (
