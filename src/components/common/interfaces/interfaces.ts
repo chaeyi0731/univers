@@ -84,5 +84,12 @@ interface FileUploadFieldProps {
   name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+//? post 타이틀 interface
+interface PostTitleFieldProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  type?: 'text' | 'textarea';
+}
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps , FileUploadFieldProps };
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps, FileUploadFieldProps, PostTitleFieldProps };
