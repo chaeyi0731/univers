@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config();
 
 const express = require('express');
 const app = express();
@@ -33,7 +33,7 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
-//? db 연결 
+//? db 연결
 db.connect((err) => {
   if (err) {
     console.error('Database connection error:', err);
