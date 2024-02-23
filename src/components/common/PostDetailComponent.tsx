@@ -1,6 +1,6 @@
 // PostDetailComponent.jsx
 import React from 'react';
-import { PostDetail } from '../../components/common/interfaces/interfaces';
+import { PostDetail } from './interfaces/interfaces';
 
 interface PostDetailComponentProps {
   postDetail: PostDetail | null;
