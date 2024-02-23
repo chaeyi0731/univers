@@ -443,12 +443,12 @@ textarea {
 .createPostFormContainer {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   max-width: 600px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 40px;
   border: 1px solid #e1e1e1;
   border-radius: 8px;
-  background: #fff;
 }
 
 .createPostFormLabel {
