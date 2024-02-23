@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../hooks/UserContext';
+import PostTitleField from '../../components/common/PostTitleField';
+import TextAreaField from '../../components/common/TextAreaField';
+import FileUploadField from '../../components/common/FileUploadFieldProps';
 
 const CreatePostPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -52,26 +55,16 @@ const CreatePostPage: React.FC = () => {
 
   return (
     <div className="main-content">
-      <div className="widgets">
-        <form className="createPostFormContainer" onSubmit={handleSubmit}>
-          <label className="styles.createPostFormLabel">
-            제목:
-            <input className="createPostFormInput" type="text" value={title} onChange={handleTitleChange} />
-          </label>
-          <label className="createPostFormLabel">
-            내용:
-            <textarea className="createPostFormTextarea" value={content} onChange={handleContentChange} />
-          </label>
-          <label className="createPostFormLabel">
-            이미지 첨부:
-            <input className="createPostFormInput" type="file" name="image" onChange={handleImageUpload} />
-          </label>
-          <button className="createPostFormButton" type="submit">
-            게시글 작성
-          </button>
-        </form>
-      </div>
+      <form className="createPostFormContainer" onSubmit={handleSubmit}>
+        <PostTitleField label="제목" type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextAreaField label="내용" value={content} onChange={(e) => setContent(e.target.value)} />
+        <FileUploadField label="이미지 첨부" name="image" onChange={(e) => handleImageUpload(e)} />
+        <button className="createPostFormButton" type="submit">
+          게시글 작성
+        </button>
+      </form>
     </div>
   );
 };
+
 export default CreatePostPage;
