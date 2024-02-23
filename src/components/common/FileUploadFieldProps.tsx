@@ -5,7 +5,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, onChange
   return (
     <div>
       <p>{label}</p>
-      <input type="file" name={name} className="user-info" onChange={onChange} />
+      <input type="file" name={name} onChange={onChange} />
     </div>
   );
 };
