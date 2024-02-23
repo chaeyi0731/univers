@@ -78,4 +78,11 @@ interface Apod {
   url: string;
 }
 
-export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps };
+//? 파일 업로드 interface
+interface FileUploadFieldProps {
+  label: string;
+  name: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export type { Comment, PostDetail, User, Message, LoginContextType, UserInfo, UserContextType, Post, Apod, UserProviderProps, CommentsComponentProps , FileUploadFieldProps };
