@@ -68,10 +68,10 @@ interface PostDetail {
 //? post 타이틀 interface
 interface PostTitleFieldProps {
   label: string;
-  type: string;
   name: string; // 이 줄 추가
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: any) => void; // 여기서 타입을 any로 변경
+  type?: 'text' | 'textarea';
 }
 //? post 내용 interface
 interface TextAreaFieldProps {
