@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function usePostDestail(postId) {
+function usePostDestail(postId: string) {
   const [postDetail, setPostDetail] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
