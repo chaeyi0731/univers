@@ -23,9 +23,11 @@ const PostDetailPage: React.FC = () => {
 
   return (
     <div className="main-content">
-      <PostDetailComponent postDetail={postDetail} />
-      <hr />
-      <CommentsComponent comments={comments} newComment={newComment} setNewComment={setNewComment} handleCommentSubmit={handleCommentSubmit} />
+      <div>
+        <PostDetailComponent postDetail={postDetail} />
+        <hr />
+        <CommentsComponent comments={comments} newComment={newComment} setNewComment={setNewComment} handleCommentSubmit={handleCommentSubmit} />
+      </div>
     </div>
   );
 };
