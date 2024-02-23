@@ -22,6 +22,7 @@ const PostPage: React.FC = () => {
       <div className="widgets">
         <div className="postwidgets">
           <h1>게시판</h1>
+          <button>게시글 작성</button>
           <PostTable posts={posts} onRowClick={(postId) => navigate(`/post/${postId}`)} />
         </div>
       </div>
