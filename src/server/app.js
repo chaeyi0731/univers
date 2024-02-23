@@ -1,4 +1,5 @@
 require('dotenv').config({ path: '../../.env' });
+//환경변수 확인!!
 
 const express = require('express');
 const app = express();
