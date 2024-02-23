@@ -51,24 +51,40 @@ interface CommentsComponentProps {
 }
 
 //? Post 관련 interface
-interface PostDetail {
-  post_id: number;
-  title: string;
-  content: string;
-  image_url: string | null;
-}
-
-interface Message {
-  username: string;
-  text: string;
-  timestamp: string;
-}
 
 interface Post {
   post_id: number;
   title: string;
   name: string;
   timestamp: string;
+}
+//? 게시글 상세
+interface PostDetail {
+  post_id: number;
+  title: string;
+  content: string;
+  image_url: string | null;
+}
+//? post 타이틀 interface
+interface PostTitleFieldProps {
+  label: string;
+  type: string;
+  name: string; // 이 줄 추가
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+//? post 내용 interface
+interface TextAreaFieldProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+//? post에서 파일 업로드 interface
+interface FileUploadFieldProps {
+  label: string;
+  name: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 //? universePage interface
@@ -78,23 +94,11 @@ interface Apod {
   url: string;
 }
 
-//? 파일 업로드 interface
-interface FileUploadFieldProps {
-  label: string;
-  name: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-//? post 타이틀 interface
-interface PostTitleFieldProps {
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
-  type?: 'text' | 'textarea';
-}
-interface TextAreaFieldProps {
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+//?채팅관련 interface
+interface Message {
+  username: string;
+  text: string;
+  timestamp: string;
 }
 
 export type {
