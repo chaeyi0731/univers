@@ -34,3 +34,5 @@ function usePostDestail(postId: string) {
 
   return { postDetail, comments, loading };
 }
+
+export default usePostDestail;
