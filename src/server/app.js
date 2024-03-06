@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+require('dotenv').config({ path: '../../.env' });
 //환경변수 확인!!
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -97,6 +96,7 @@ app.post('/api/login', (req, res) => {
     // JWT 토큰 생성
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+    
     res.send({ success: true, token, user: { name: user.name, username: user.username } });
   });
 });
