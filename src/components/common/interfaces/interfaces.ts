@@ -14,7 +14,7 @@ interface User {
 interface UserContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 interface UserInfo {
   username: string;
@@ -25,7 +25,7 @@ interface UserInfo {
 }
 
 interface UserProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 //? 로그인 관련 interface
