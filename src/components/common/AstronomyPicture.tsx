@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Apod } from './interfaces/interfaces';
-
-// NASA의 APOD API로부터 받아올 데이터의 타입을 정의합니다.
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../hooks/UserContext'; // 실제 경로에 맞게 수정하세요.
+import { Apod, UserContextType } from './interfaces/interfaces';
 
 const AstronomyPicture: React.FC = () => {
+  const today = new Date().toISOString().split('T')[0];
+  const [dateInput, setDateInput] = useState<string>('2023-12-25');
   const [apod, setApod] = useState<Apod | null>(null);
-  const [dateInput, setDateInput] = useState<string>(() => {
-    // 현재 날짜를 YYYY-MM-DD 형식으로 가져옵니다.
-    const today = new Date();
-    const date: string = today.toISOString().split('T')[0];
-    return date;
-  });
   const apiKey: string = 'kPaqXTtaN1YmenxQ6wEdzTovcXk8iv7fa7EMS9c8';
+  // useContext에서 UserContextType을 명시적으로 사용합니다.
+  const userContext = useContext<UserContextType | null>(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const apiUrl: string = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${dateInput}`;
 
-    axios
-      .get(apiUrl)
+    axios.get(apiUrl)
       .then((response) => {
         setApod(response.data);
       })
@@ -27,14 +25,17 @@ const AstronomyPicture: React.FC = () => {
       });
   }, [dateInput]);
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDateInput(event.target.value);
+  const handleClick = () => {
+    // userContext가 null이 아니고, userContext 내부의 user도 null이 아닐 때만 날짜 변경을 허용합니다.
+    if (!userContext || !userContext.user) {
+      navigate('/login');
+    }
   };
 
   return (
     <div>
       <p>날짜 선택</p>
-      <input type="date" id="datepicker" value={dateInput} onChange={handleDateChange} />
+      <input type="date" id="datepicker" value={dateInput} onChange={(e) => setDateInput(e.target.value)} onClick={handleClick} />
       {apod ? (
         <div>
           <h1>{apod.title || 'No Title Available'}</h1>
