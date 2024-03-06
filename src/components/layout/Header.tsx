@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../../hooks/UserContext';
 
 const Header = () => {
+  const { user, logout } = useContext(UserContext)!;
   const userContext = useContext(UserContext);
   if (!userContext) return null; // UserContext가 제공되지 않은 경우를 처리
-  const { user, logout } = userContext;
 
   return (
     <header>

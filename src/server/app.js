@@ -94,13 +94,9 @@ app.post('/api/login', (req, res) => {
     }
 
     // JWT 토큰 생성
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
-      process.env.JWT_SECRET, // .env 파일 또는 다른 보안된 장소에 저장된 비밀키
-      { expiresIn: '1h' } // 토큰 유효 시간
-    );
+    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.send({ success: true, token }); // 토큰을 응답으로 반환
+    res.send({ success: true, token, user: { name: user.name, username: user.username } });
   });
 });
 

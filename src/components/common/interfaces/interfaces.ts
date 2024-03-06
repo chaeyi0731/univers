@@ -25,7 +25,7 @@ interface UserInfo {
 }
 
 interface UserProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 //? 로그인 관련 interface
