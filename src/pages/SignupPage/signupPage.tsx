@@ -26,7 +26,7 @@ const SignupPage: React.FC = () => {
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/signup`, values);
       alert('회원가입이 완료되었습니다.');
-      window.location.href = '/';
+      window.location.href = '/main';
     } catch (error: any) {
       alert(error.response?.data?.message || '회원가입 중 오류가 발생했습니다.');
     }
