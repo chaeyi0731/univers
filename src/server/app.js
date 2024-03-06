@@ -1,5 +1,8 @@
 require('dotenv').config({ path: '../../.env' });
 //환경변수 확인!!
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const saltRounds = 10; // saltRounds는 해싱 계산에 사용되는 복잡성을 결정합니다.
 
 const express = require('express');
 const app = express();
@@ -46,22 +49,32 @@ db.connect((err) => {
 //? 회원가입 API
 app.post('/signup', async (req, res) => {
   const { username, password, name, phoneNumber, address } = req.body;
-  const query = 'INSERT INTO Users (username, password, name, phone_number, address) VALUES (?, ?, ?, ?, ?)';
-  db.query(query, [username, password, name, phoneNumber, address], (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error during signup');
-      return;
-    }
-    res.status(201).send('User registered successfully');
-  });
+
+  try {
+    // 비밀번호를 해싱
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // 해싱된 비밀번호를 사용하여 사용자 등록
+    const query = 'INSERT INTO Users (username, password, name, phone_number, address) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [username, hashedPassword, name, phoneNumber, address], (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error during signup');
+        return;
+      }
+      res.status(201).send('User registered successfully');
+    });
+  } catch (error) {
+    console.error('Error hashing password', error);
+    res.status(500).send('Error during signup');
+  }
 });
 
 //? 로그인 API
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM Users WHERE username = ?';
-  db.query(query, [username], (err, results) => {
+  db.query(query, [username], async (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).send('서버 오류');
@@ -72,11 +85,62 @@ app.post('/api/login', (req, res) => {
       return;
     }
     const user = results[0];
-    if (password !== user.password) {
+
+    // 데이터베이스에 저장된 해시와 비밀번호 비교
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
       res.status(401).send('비밀번호가 일치하지 않습니다.');
       return;
     }
-    res.send({ success: true, user });
+
+    // JWT 토큰 생성
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET, // .env 파일 또는 다른 보안된 장소에 저장된 비밀키
+      { expiresIn: '1h' } // 토큰 유효 시간
+    );
+
+    res.send({ success: true, token }); // 토큰을 응답으로 반환
+  });
+});
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401); // 토큰이 없으면 인증 실패
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // 토큰이 유효하지 않으면 액세스 거부
+    req.user = user;
+    next(); // 다음 미들웨어로 이동
+  });
+};
+
+app.get('/some-protected-route', authenticateToken, (req, res) => {
+  res.json({ message: '이 경로는 보호됩니다.' });
+});
+
+app.get('/api/verifyToken', authenticateToken, (req, res) => {
+  // authenticateToken 미들웨어를 통과한 후, req.user에는 토큰에서 추출한 사용자 정보가 담겨 있음
+  const userId = req.user.id; // 토큰에서 추출한 사용자 ID
+
+  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보 조회
+  // 컬럼 이름을 'id'에서 'user_id'로 변경
+  const query = 'SELECT user_id, username, name FROM Users WHERE user_id = ?';
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('서버 오류');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send('사용자를 찾을 수 없습니다.');
+    }
+
+    // 사용자 정보를 찾은 경우, 사용자 정보를 응답으로 반환
+    const user = results[0];
+    res.json({ user });
   });
 });
 
@@ -289,5 +353,5 @@ app.post('/comments', (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`서버가 실행 되고 있습니다. 포트: ${PORT}.`);
 });
