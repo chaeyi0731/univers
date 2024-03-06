@@ -21,37 +21,38 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   // 애플리케이션 로딩 시 사용자 인증 상태 확인
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    // 서버에 사용자 인증 상태 확인 요청
-    axios.get(`${process.env.REACT_APP_API_URL}/api/verifyToken`)
-      .then(response => {
-        if (response.data.user) {
-          setUser(response.data.user); // 사용자 정보로 상태 업데이트
-        } else {
-          // 토큰이 유효하지 않은 경우
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // 서버에 사용자 인증 상태 확인 요청
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/api/verifyToken`)
+        .then((response) => {
+          if (response.data.user) {
+            setUser(response.data.user); // 사용자 정보로 상태 업데이트
+          } else {
+            // 토큰이 유효하지 않은 경우
+            localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
+            setUser(null); // 사용자 상태 초기화
+          }
+        })
+        .catch((error) => {
+          console.error('사용자 인증 상태 확인 실패', error);
           localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
           setUser(null); // 사용자 상태 초기화
-        }
-      })
-      .catch(error => {
-        console.error('사용자 인증 상태 확인 실패', error);
-        localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 제거
-        setUser(null); // 사용자 상태 초기화
-      });
-  }
-}, []);
+        });
+    }
+  }, []);
 
   const login = async (username: string, password: string) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, { username, password });
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token); // JWT를 localStorage에 저장
+        localStorage.setItem('token', response.data.token); // JWT 저장
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        setUser(response.data.user);
-        navigate('/'); // 로그인 성공 후 리다이렉트
+        setUser(response.data.user); // 여기서 사용자 정보 상태 업데이트
+        navigate('/'); // 리다이렉트
       } else {
         alert('로그인 실패');
       }
