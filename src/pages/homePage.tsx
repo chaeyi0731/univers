@@ -15,7 +15,7 @@ const MainContent: React.FC = () => {
           <div></div>
           <p className="mainp">POST</p>
         </Link>
-        <Link to="/universe" className="universe">
+        <Link to="/" className="universe">
           <div></div>
           <p className="mainnp">UNIVERSE</p>
         </Link>
