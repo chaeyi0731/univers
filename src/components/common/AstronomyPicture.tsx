@@ -16,7 +16,8 @@ const AstronomyPicture: React.FC = () => {
   useEffect(() => {
     const apiUrl: string = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${dateInput}`;
 
-    axios.get(apiUrl)
+    axios
+      .get(apiUrl)
       .then((response) => {
         setApod(response.data);
       })
@@ -26,8 +27,8 @@ const AstronomyPicture: React.FC = () => {
   }, [dateInput]);
 
   const handleClick = () => {
-    // userContext가 null이 아니고, userContext 내부의 user도 null이 아닐 때만 날짜 변경을 허용합니다.
     if (!userContext || !userContext.user) {
+      alert('이 기능을 사용하기 위해서는 로그인이 필요합니다.');
       navigate('/login');
     }
   };
