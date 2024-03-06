@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config();
+
 //환경변수 확인!!
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
