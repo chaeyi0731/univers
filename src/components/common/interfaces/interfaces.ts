@@ -14,7 +14,7 @@ interface User {
 interface UserContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: () => void;
 }
 interface UserInfo {
   username: string;
