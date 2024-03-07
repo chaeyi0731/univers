@@ -48,15 +48,15 @@ db.connect((err) => {
 
 //? 회원가입 API
 app.post('/signup', async (req, res) => {
-  const { username, password, name, phoneNumber, address } = req.body;
+  const { username, password, name, phoneNumber, address, email } = req.body;
 
   try {
     // 비밀번호를 해싱
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // 해싱된 비밀번호를 사용하여 사용자 등록
-    const query = 'INSERT INTO Users (username, password, name, phone_number, address) VALUES (?, ?, ?, ?, ?)';
-    db.query(query, [username, hashedPassword, name, phoneNumber, address], (err, result) => {
+    const query = 'INSERT INTO Users (username, password, name, phoneNumber, address,email) VALUES (?, ?, ?, ?, ?,?)';
+    db.query(query, [username, hashedPassword, name, phoneNumber, address, email], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error during signup');
