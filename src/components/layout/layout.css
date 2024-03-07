@@ -296,8 +296,8 @@ body {
 
 /* 채팅 말풍선 스타일링 */
 .message-bubble {
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
   background-color: #f0f0f0;
   border-radius: 20px;
   max-width: 80%;
@@ -306,6 +306,7 @@ body {
 
 .message-bubble strong {
   color: #333;
+  font-size: 1rem;
 }
 
 /* post 스타일링 */
