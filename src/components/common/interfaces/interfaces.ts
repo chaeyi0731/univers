@@ -97,7 +97,7 @@ interface Apod {
 //?채팅관련 interface
 interface Message {
   username: string;
-  text: string;
+  message: string;
   timestamp: string;
 }
 
