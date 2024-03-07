@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
   const handleLoginClick = async () => {
     try {
       await login(username, password);
-      navigate('/'); // 로그인 성공 시 메인 페이지로 이동
+      navigate('/main'); // 로그인 성공 시 메인 페이지로 이동
     } catch (error) {
       console.error('로그인 요청 실패', error);
       alert('로그인 실패');
