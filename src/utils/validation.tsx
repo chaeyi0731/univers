@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import ValidationProps from '../components/common/interfaces/Validation/ValidationProps';
 
 // 유효성 검사 함수를 컴포넌트와 같은 파일에 포함
-const validateForm = (values: ValidationProps['values']): boolean => {
+export const validateForm = (values: ValidationProps['values']): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^(\d{10,11})$/; // 10~11자리 숫자만 허용
 
@@ -26,14 +26,3 @@ const validateForm = (values: ValidationProps['values']): boolean => {
 
   return true; // 모든 검사를 통과했다면 true 반환
 };
-
-const Validation: React.FC<ValidationProps> = ({ values, setValidationPassed }) => {
-  useEffect(() => {
-    const isValid = validateForm(values);
-    setValidationPassed(isValid);
-  }, [values, setValidationPassed]);
-
-  return null; // 이 컴포넌트는 UI를 렌더링하지 않음
-};
-
-export default Validation;
