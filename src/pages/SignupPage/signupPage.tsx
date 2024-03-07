@@ -30,7 +30,7 @@ const SignupPage: React.FC = () => {
         await axios.post(`${process.env.REACT_APP_API_URL}/signup`, values);
         alert('회원가입이 완료되었습니다.');
         // 성공적으로 회원가입 후, 다른 페이지로 리디렉션
-        window.location.href = '/main';
+        window.location.href = '/login';
       } catch (error) {
         // API 요청 실패 시, 오류 메시지를 표시합니다.
         alert('회원가입 중 오류가 발생했습니다.');
