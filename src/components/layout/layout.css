@@ -77,7 +77,7 @@ body {
 /* main 컨텐츠 관련 스타일링 */
 .main-content {
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -479,4 +479,21 @@ textarea {
 
 .createPostFormButton:hover {
   background-color: #490a89;
+}
+
+/* 회원가입 스타일 */
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.inputForm {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
