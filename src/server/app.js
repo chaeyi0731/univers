@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // saltRounds는 해싱 계산에 사용되는 복잡성을 결정합니다.
 
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -96,7 +98,6 @@ app.post('/api/login', (req, res) => {
     // JWT 토큰 생성
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    
     res.send({ success: true, token, user: { name: user.name, username: user.username } });
   });
 });
