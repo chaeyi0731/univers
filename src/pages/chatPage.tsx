@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios'; // axios를 추가
 import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
@@ -12,8 +13,32 @@ const ChatPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
+    // 사용자가 로그인하지 않았으면 로그인 페이지로 이동
     if (!user) {
       navigate('/login');
+    } else {
+      // 서버에서 이전 메시지를 불러오기
+      const fetchMessages = async () => {
+        try {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`);
+          // 서버에서 받아온 메시지를 상태에 설정
+          setMessages(
+            response.data.map((msg: Message) => ({
+              ...msg,
+              // timestamp를 한국 시간으로 변환하고, 시간과 분만 표시
+              timestamp: new Date(msg.timestamp).toLocaleString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Seoul',
+              }),
+            }))
+          );
+        } catch (error) {
+          console.error('메시지 불러오기 실패:', error);
+        }
+      };
+
+      fetchMessages();
     }
   }, [user, navigate]);
 
@@ -74,7 +99,7 @@ const ChatPage: React.FC = () => {
           {messages.map((msg, index) => (
             <div key={index} className="message-bubble">
               <strong>
-                {msg.username}: {msg.text}
+                {msg.username}: {msg.message}
               </strong>
             </div>
           ))}
