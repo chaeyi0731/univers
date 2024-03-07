@@ -13,7 +13,7 @@ const Header = () => {
       <div className="header">
         <div className="fake"></div>
         <Link to="/main">
-          <img className="bgcimg" src={'https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/stellachatlogo.png'} alt="StellaChat Logo" />
+          <img className="bgcimg" src={'https://stellatalk.s3.ap-northeast-2.amazonaws.com/image/univers.png'} alt="Universe Logo" />
         </Link>
 
         <div className="Info">
