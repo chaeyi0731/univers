@@ -34,13 +34,18 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       if (response.data.success && response.data.token) {
         localStorage.setItem('token', response.data.token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        setUser(response.data.user); // 사용자 정보 상태 업데이트
-        navigate('/');
+        setUser(response.data.user);
+        navigate('/main');
       } else {
-        alert('로그인 실패');
+        // 서버로부터 응답은 받았지만, 로그인에 실패했을 경우
+        alert('로그인 실패: 아이디와 비밀번호를 체크하세요.');
+        navigate('/login');
       }
     } catch (error) {
       console.error('로그인 요청 실패', error);
+      // 네트워크 에러나 서버 에러 등으로 인한 로그인 실패
+      alert('로그인 실패: 아이디와 비밀번호를 체크하세요.');
+      navigate('/login');
     }
   };
 
