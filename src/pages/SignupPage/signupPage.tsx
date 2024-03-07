@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { validateForm } from '../../utils/validation';
 import InputField from '../../components/common/InputField';
+import Postcode from './address/address';
 
 const SignupPage: React.FC = () => {
   const [values, setValues] = useState({
@@ -53,7 +54,7 @@ const SignupPage: React.FC = () => {
               <InputField label="비밀번호" type="password" name="password" value={values.password} onChange={handleChange} />
               <InputField label="이름" type="text" name="name" value={values.name} onChange={handleChange} />
               <InputField label="핸드폰" type="text" name="phoneNumber" value={values.phoneNumber} onChange={handleChange} />
-              <InputField label="주소" type="text" name="address" value={values.address} onChange={handleChange} />
+              <Postcode />
               <button type="submit">가입하기</button>
             </form>
           </div>
