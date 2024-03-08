@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import Modal from 'react-modal';
+import AddressSelectHandler from '../../../components/common/interfaces/Address/AddressSelectHandler'
 
-const Postcode: React.FC = () => {
+const Postcode: React.FC<AddressSelectHandler> = ({ onAddressSelect }) => {
   const [zipCode, setZipcode] = useState<string>('');
   const [roadAddress, setRoadAddress] = useState<string>('');
   const [detailAddress, setDetailAddress] = useState<string>(''); // 추가
@@ -11,7 +12,13 @@ const Postcode: React.FC = () => {
   const completeHandler = (data: any) => {
     setZipcode(data.zonecode);
     setRoadAddress(data.roadAddress);
-    setIsOpen(false); //추가
+    setIsOpen(false);
+
+    onAddressSelect({
+      zipCode: data.zonecode,
+      roadAddress: data.roadAddress,
+      detailAddress: '', // 상세 주소는 입력 받아야 하므로 빈 문자열로 초기화
+    });
   };
 
   // Modal 스타일
@@ -39,23 +46,16 @@ const Postcode: React.FC = () => {
     setDetailAddress(e.target.value);
   };
 
-  // 추가
-  const clickHandler = () => {
-    if (detailAddress === '') {
-      alert('상세주소를 입력해주세요.');
-    } else {
-      console.log(zipCode, roadAddress, detailAddress);
-    }
-  };
-
   return (
     <div className="inputForm">
       <label htmlFor={zipCode} className="form-label">
         주소
       </label>
       <div className="address">
-      <input className="addressNumber" value={zipCode} readOnly placeholder="우편번호" />
-      <button onClick={toggle}>우편번호 검색</button>
+        <input className="addressNumber" value={zipCode} readOnly placeholder="우편번호" />
+        <button type="button" onClick={toggle}>
+          우편번호 검색
+        </button>
       </div>
       <br />
       <input className="user-info" value={roadAddress} readOnly placeholder="도로명 주소" />
