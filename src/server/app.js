@@ -307,7 +307,7 @@ app.get('/comments', (req, res) => {
   db.query(query, [post_id], (error, comments) => {
     if (error) {
       // 쿼리 실행 중 에러가 발생한 경우, 에러 메시지를 보냅니다.
-      console.error('Error fetching comments:', error);
+      console.error('댓글을 남기지 못했습니다.:', error);
       return res.status(500).send('Server error');
     }
 
