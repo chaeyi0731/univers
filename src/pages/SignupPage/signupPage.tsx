@@ -14,15 +14,29 @@ const SignupPage: React.FC = () => {
     address: '',
   });
 
+  const [addressInfo, setAddressInfo] = useState({
+    zipCode: '',
+    roadAddress: '',
+    detailAddress: '',
+  });
+
+  const handleAddressSelect = ({ zipCode, roadAddress, detailAddress }: { zipCode: string; roadAddress: string; detailAddress: string }) => {
+    setAddressInfo({ zipCode, roadAddress, detailAddress });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
+
+    // 'address'를 제외한 모든 필드에 대해 유효성 검사를 진행합니다.
+    if (name !== 'address') {
+      validateForm(values);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
+    e.preventDefault();
 
-    // 직접 유효성 검사를 호출
     const isValid = validateForm(values);
 
     if (isValid) {
@@ -54,7 +68,7 @@ const SignupPage: React.FC = () => {
               <InputField label="비밀번호" type="password" name="password" value={values.password} onChange={handleChange} />
               <InputField label="이름" type="text" name="name" value={values.name} onChange={handleChange} />
               <InputField label="핸드폰" type="text" name="phoneNumber" value={values.phoneNumber} onChange={handleChange} />
-              <Postcode />
+              <Postcode onAddressSelect={handleAddressSelect} />
               <button type="submit">가입하기</button>
             </form>
           </div>
