@@ -95,48 +95,42 @@ app.post('/api/login', (req, res) => {
       return;
     }
 
-    // JWT 토큰 생성
-    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    const token = jwt.sign({ id: user.user_id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.send({ success: true, token, user: { name: user.name, username: user.username } });
   });
 });
 
+// 토큰 검증 미들웨어
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  if (token == null) return res.sendStatus(401); // 토큰이 없으면 인증 실패
+  if (!token) return res.sendStatus(401); // 토큰이 없으면 인증 실패
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403); // 토큰이 유효하지 않으면 액세스 거부
-    req.user = user;
-    next(); // 다음 미들웨어로 이동
+
+    // 디코딩된 페이로드에서 user_id와 username 추출
+    req.user = { user_id: decoded.user_id, username: decoded.username };
+    next(); // 검증 성공, 다음 미들웨어로 이동
   });
 };
 
-app.get('/some-protected-route', authenticateToken, (req, res) => {
-  res.json({ message: '이 경로는 보호됩니다.' });
-});
-
+// 사용자 인증 확인 API
 app.get('/api/verifyToken', authenticateToken, (req, res) => {
-  // authenticateToken 미들웨어를 통과한 후, req.user에는 토큰에서 추출한 사용자 정보가 담겨 있음
-  const userId = req.user.id; // 토큰에서 추출한 사용자 ID
+  const { user_id } = req.user; // authenticateToken 미들웨어를 통과한 후, 추출된 user_id 사용
 
-  // 사용자 ID를 사용하여 데이터베이스에서 사용자 정보 조회
-  // 컬럼 이름을 'id'에서 'user_id'로 변경
+  // 사용자 ID로 데이터베이스에서 사용자 정보 조회
   const query = 'SELECT user_id, username, name FROM Users WHERE user_id = ?';
-  db.query(query, [userId], (err, results) => {
+  db.query(query, [user_id], (err, results) => {
     if (err) {
       console.error(err);
       return res.status(500).send('서버 오류');
     }
-
     if (results.length === 0) {
       return res.status(404).send('사용자를 찾을 수 없습니다.');
     }
-
-    // 사용자 정보를 찾은 경우, 사용자 정보를 응답으로 반환
+    // 사용자 정보를 찾은 경우, 응답으로 반환
     const user = results[0];
     res.json({ user });
   });
