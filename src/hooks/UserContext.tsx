@@ -31,9 +31,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const login = async (username: string, password: string): Promise<void> => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, { username, password });
+      const { token } = response.data;
       if (response.data.success && response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+        localStorage.setItem('token', token); // 로컬 스토리지에 토큰 저장
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setUser(response.data.user);
         navigate('/main');
       } else {
