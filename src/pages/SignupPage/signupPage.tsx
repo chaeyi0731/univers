@@ -27,31 +27,23 @@ const SignupPage: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
-
-    // 'address'를 제외한 모든 필드에 대해 유효성 검사를 진행합니다.
-    if (name !== 'address') {
-      validateForm(values);
-    }
   };
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
+    // 제출 시에만 유효성 검사를 진행합니다.
     const isValid = validateForm(values);
-
+  
     if (isValid) {
       try {
-        // 폼 데이터가 유효한 경우, API 요청을 수행합니다.
-        await axios.post(`${process.env.REACT_APP_API_URL}/signup`, values);
+        await axios.post(`${process.env.REACT_APP_API_URL}/signup`, { ...values, ...addressInfo });
         alert('회원가입이 완료되었습니다.');
-        // 성공적으로 회원가입 후, 다른 페이지로 리디렉션
         window.location.href = '/login';
       } catch (error) {
-        // API 요청 실패 시, 오류 메시지를 표시합니다.
         alert('회원가입 중 오류가 발생했습니다.');
       }
     } else {
-      // 유효성 검사를 통과하지 못한 경우, 적절한 메시지를 표시합니다.
       alert('입력한 정보를 다시 확인해주세요.');
     }
   };
