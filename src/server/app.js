@@ -116,12 +116,10 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// 사용자 인증 확인 API
 app.get('/api/verifyToken', authenticateToken, (req, res) => {
-  const { user_id } = req.user; // authenticateToken 미들웨어를 통과한 후, 추출된 user_id 사용
-
-  // 사용자 ID로 데이터베이스에서 사용자 정보 조회
+  const { user_id } = req.user;
   const query = 'SELECT user_id, username, name FROM Users WHERE user_id = ?';
+
   db.query(query, [user_id], (err, results) => {
     if (err) {
       console.error(err);
@@ -130,9 +128,9 @@ app.get('/api/verifyToken', authenticateToken, (req, res) => {
     if (results.length === 0) {
       return res.status(404).send('사용자를 찾을 수 없습니다.');
     }
-    // 사용자 정보를 찾은 경우, 응답으로 반환
+
     const user = results[0];
-    res.json({ user });
+    return res.json({ user });
   });
 });
 
