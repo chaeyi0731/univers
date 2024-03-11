@@ -20,17 +20,18 @@ const ChatPage: React.FC = () => {
     }
 
     const token = localStorage.getItem('token');
-    if (token && !socketRef.current) {
+    if (user && token && !socketRef.current) {
+      // 환경 변수를 사용할 때는 백틱과 ${}를 사용하여 문자열 안에 변수를 삽입합니다.
       socketRef.current = io(`${process.env.REACT_APP_API_URL}`, {
         transports: ['websocket'],
         query: { token },
       });
 
-      socketRef.current.on('chat message', (msg: any) => {
+      socketRef.current.on('chat message', (msg) => {
         setMessages((prevMessages) => [...prevMessages, msg]);
       });
 
-      // 이전 메시지를 불러오는 함수 호출
+      // 이전 메시지를 불러오는 함수
       const fetchMessages = async () => {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`);
@@ -48,13 +49,18 @@ const ChatPage: React.FC = () => {
           console.error('메시지 불러오기 실패:', error);
         }
       };
-      fetchMessages();
+
+      // 소켓 연결 설정 후 메시지 불러오기
+      socketRef.current.on('connect', () => {
+        fetchMessages();
+      });
     }
 
     return () => {
+      // 컴포넌트가 언마운트될 때 소켓 연결을 해제합니다.
       if (socketRef.current) {
         socketRef.current.off('chat message');
-        socketRef.current.close();
+        socketRef.current.disconnect(); // disconnect 메소드를 사용하여 소켓 연결 해제
         socketRef.current = null;
       }
     };
@@ -65,20 +71,19 @@ const ChatPage: React.FC = () => {
   };
 
   const handleSendClick = () => {
-    if (user && socketRef.current) {
+    if (user && socketRef.current && message.trim() !== '') {
       const messageData = {
-        user_id: user.user_id,
         username: user.name,
-        text: message,
+        message: message.trim(),
         timestamp: new Date().toISOString(),
+        user_id: user.user_id,
       };
 
       socketRef.current.emit('chat message', messageData);
       setMessage('');
-    } else {
-      console.error('로그인한 사용자만 메시지를 보낼 수 있습니다.');
     }
   };
+
   return (
     <div className="main-content">
       <div className="widgets">
