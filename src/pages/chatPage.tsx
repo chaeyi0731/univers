@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import axios from 'axios'; // axios를 추가
+import React, { useState, useContext, useEffect, useRef } from 'react';
+import axios from 'axios';
 import { UserContext } from '../hooks/UserContext';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/layout.css';
@@ -11,21 +11,32 @@ const ChatPage: React.FC = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    // 사용자가 로그인하지 않았으면 로그인 페이지로 이동
     if (!user) {
       navigate('/login');
-    } else {
-      // 서버에서 이전 메시지를 불러오기
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (token && !socketRef.current) {
+      socketRef.current = io(`${process.env.REACT_APP_API_URL}`, {
+        transports: ['websocket'],
+        query: { token },
+      });
+
+      socketRef.current.on('chat message', (msg: any) => {
+        setMessages((prevMessages) => [...prevMessages, msg]);
+      });
+
+      // 이전 메시지를 불러오는 함수 호출
       const fetchMessages = async () => {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/messages`);
-          // 서버에서 받아온 메시지를 상태에 설정
           setMessages(
             response.data.map((msg: Message) => ({
               ...msg,
-              // timestamp를 한국 시간으로 변환하고, 시간과 분만 표시
               timestamp: new Date(msg.timestamp).toLocaleString('ko-KR', {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -37,61 +48,37 @@ const ChatPage: React.FC = () => {
           console.error('메시지 불러오기 실패:', error);
         }
       };
-
       fetchMessages();
     }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('chat message');
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+    };
   }, [user, navigate]);
-
-  // 환경 변수 검사 없이 소켓 연결을 직접 초기화합니다.
-  const socket: Socket = io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] });
-
-  socket.on('chat message', (msg: any) => {
-    console.log(msg);
-  });
-
-  useEffect(() => {
-    if (user) {
-      socket.on('previous messages', (previousMessages) => {
-        // 이전 메시지들을 상태에 설정하여 화면에 표시
-        setMessages(previousMessages);
-      });
-
-      socket.on('chat message', (msg) => {
-        // 새 메시지를 상태에 추가
-        setMessages((prevMessages) => [...prevMessages, msg]);
-      });
-
-      return () => {
-        socket.off('previous messages');
-        socket.off('chat message');
-      };
-    }
-  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const handleSendClick = () => {
-    if (user) {
-      // UserContext에서 로그인한 사용자 정보를 확인
+    if (user && socketRef.current) {
       const messageData = {
-        user_id: user.user_id, // 로그인한 사용자의 ID
-        username: user.name, // 로그인한 사용자의 이름
-        text: message, // 입력한 메시지 내용
-        timestamp: new Date().toISOString(), // 메시지 보낸 시간
+        user_id: user.user_id,
+        username: user.name,
+        text: message,
+        timestamp: new Date().toISOString(),
       };
 
-      // 소켓을 통해 서버로 메시지 정보 전송
-      socket.emit('chat message', messageData);
-
-      // 추가적인 처리 (예: 메시지 입력 필드 초기화)
+      socketRef.current.emit('chat message', messageData);
       setMessage('');
     } else {
       console.error('로그인한 사용자만 메시지를 보낼 수 있습니다.');
     }
-  }; // 입력 필드 초기화
-
+  };
   return (
     <div className="main-content">
       <div className="widgets">
