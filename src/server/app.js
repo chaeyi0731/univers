@@ -100,7 +100,7 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// 토큰 검증 미들웨어
+//? 토큰 검증 미들웨어
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
         console.error('Error saving message:', err);
         return;
       }
-  
+
       const messageId = result.insertId; // 삽입된 메시지의 ID
       console.log('Message saved with ID:', messageId);
 
@@ -196,8 +196,10 @@ app.get('/api/messages', (req, res) => {
 
 //? 게시글 작성 api
 
-app.post('/create-post', upload.single('image'), (req, res) => {
-  const { title, content, user_id } = req.body; // user_id 추가
+app.post('/create-post', authenticateToken, upload.single('image'), (req, res) => {
+  const { title, content } = req.body;
+  const user_id = req.user.user_id;
+
   let imageUrl = null; // 이미지 URL 초기화
 
   if (req.file) {
