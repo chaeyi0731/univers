@@ -36,6 +36,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         localStorage.setItem('token', token); // 로컬 스토리지에 토큰 저장
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setUser(response.data.user);
+        console.log('Login response:', response);
+
         navigate('/main');
       } else {
         // 서버로부터 응답은 받았지만, 로그인에 실패했을 경우
