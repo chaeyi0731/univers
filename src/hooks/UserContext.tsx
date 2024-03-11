@@ -58,7 +58,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
       setUser(null);
-      navigate('/');
+      navigate('/main');
     } catch (error) {
       console.error('로그아웃 요청 실패', error);
     }
