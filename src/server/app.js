@@ -151,33 +151,37 @@ const io = require('socket.io')(server, {
 });
 
 io.use((socket, next) => {
-  const token = socket.handshake.query.token;
+  const token = socket.handshake.query.token; // 클라이언트에서 전달받은 토큰
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return next(new Error('Authentication error'));
-    socket.user_id = decoded.user_id; // 토큰에서 추출한 user_id를 socket 객체에 추가
+    if (err) {
+      return next(new Error('Authentication error'));
+    }
+    socket.user_id = decoded.user_id; // socket 객체에 user_id 저장
     next();
   });
 });
 
-// 소켓 이벤트 핸들러
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
+  // 클라이언트로부터 받은 메시지를 데이터베이스에 저장하고 모든 클라이언트에게 전송
   socket.on('chat message', (msg) => {
-    console.log('Message from user:', msg);
-    // 여기서는 socket.user_id를 사용하여 메시지와 사용자 ID를 저장
-    const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, ?, ?)';
-    db.query(query, [msg.username, msg.text, msg.timestamp, socket.user_id], (err, result) => {
+    const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, NOW(), ?)';
+    // 메시지 저장
+    db.query(query, [msg.username, msg.text, socket.user_id], (err, result) => {
       if (err) {
         console.error('Error saving message:', err);
         return;
       }
-      console.log('Message saved:', result);
-      io.emit('chat message', msg); // 메시지를 모든 클라이언트에게 전송
+  
+      const messageId = result.insertId; // 삽입된 메시지의 ID
+      console.log('Message saved with ID:', messageId);
+
+      // 삽입된 메시지의 ID를 클라이언트로 전송
+      io.emit('chat message', { ...msg, chat_id: messageId });
     });
   });
 });
 
+// 클라이언트에게 이전 메시지 전송
 app.get('/api/messages', (req, res) => {
   const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
   db.query(query, (err, results) => {
