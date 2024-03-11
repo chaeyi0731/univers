@@ -146,28 +146,34 @@ app.post('/api/logout', (req, res) => {
 const io = require('socket.io')(server, {
   cors: {
     origin: `${process.env.REACT_APP_API_URL}`,
-    methods: ['GET', 'POST'], // 허용할 HTTP 메소드
+    methods: ['GET', 'POST'],
   },
 });
 
-// 클라이언트로부터 메시지를 받는 이벤트 리스너
+io.use((socket, next) => {
+  const token = socket.handshake.query.token;
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return next(new Error('Authentication error'));
+    socket.user_id = decoded.user_id; // 토큰에서 추출한 user_id를 socket 객체에 추가
+    next();
+  });
+});
+
+// 소켓 이벤트 핸들러
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   socket.on('chat message', (msg) => {
     console.log('Message from user:', msg);
-
-    // 메시지를 데이터베이스에 저장
+    // 여기서는 socket.user_id를 사용하여 메시지와 사용자 ID를 저장
     const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, ?, ?)';
-    // 여기서 msg.username으로 수정
-    db.query(query, [msg.username, msg.text, msg.timestamp, msg.user_id], (err, result) => {
+    db.query(query, [msg.username, msg.text, msg.timestamp, socket.user_id], (err, result) => {
       if (err) {
         console.error('Error saving message:', err);
         return;
       }
       console.log('Message saved:', result);
-      // 메시지를 모든 클라이언트에게 전송
-      io.emit('chat message', msg);
+      io.emit('chat message', msg); // 메시지를 모든 클라이언트에게 전송
     });
   });
 });
