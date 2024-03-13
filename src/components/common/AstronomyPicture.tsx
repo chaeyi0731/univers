@@ -22,7 +22,7 @@ const AstronomyPicture: React.FC = () => {
         setApod(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching the APOD data: ', error);
+        console.error('APOD API를 가지고 오는 부분에서 오류: ', error);
       });
   }, [dateInput]);
 
