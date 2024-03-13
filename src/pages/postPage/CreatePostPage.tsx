@@ -62,6 +62,7 @@ const CreatePostPage: React.FC = () => {
 
   return (
     <div className="main-content">
+      <div className="widgets">
       <form className="createPostFormContainer" onSubmit={handleSubmit}>
         <PostTitleField label="제목" type="text" name="title" value={title} onChange={handleTitleChange} />
         <TextAreaField label="내용" value={content} onChange={handleContentChange} />
@@ -70,6 +71,7 @@ const CreatePostPage: React.FC = () => {
           게시글 작성
         </button>
       </form>
+      </div>
     </div>
   );
 };
