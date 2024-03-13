@@ -14,7 +14,7 @@ const usePosts = (userContext: UserContextType, navigate: ReturnType<typeof useN
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('네트워크 응답이 올바르지 않습니다');
         }
         const data = await response.json();
         const postsWithCorrectId = data.map((post: any) => ({
@@ -23,8 +23,8 @@ const usePosts = (userContext: UserContextType, navigate: ReturnType<typeof useN
         }));
         setPosts(postsWithCorrectId);
       } catch (error) {
-        console.error('There was a problem with your fetch operation:', error);
-        setError('Failed to load posts.');
+        console.error('게시물을 불러오는 중 문제가 발생했습니다:', error);
+        setError('게시물을 불러오는 데 실패했습니다.');
       } finally {
         setIsLoading(false);
       }
