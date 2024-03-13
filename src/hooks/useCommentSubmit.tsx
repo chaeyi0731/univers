@@ -17,7 +17,7 @@ function useCommentSubmit(postId: string) {
         const decoded = jwtDecode<TokenType>(token);
         return decoded.user_id; // 디코딩된 페이로드에서 user_id를 반환합니다.
       } catch (error) {
-        console.error('Error decoding token:', error);
+        console.error('토큰 디코딩 중 오류:', error);
         return null;
       }
     }
@@ -27,7 +27,7 @@ function useCommentSubmit(postId: string) {
   const handleCommentSubmit = async () => {
     const userId = getUserIdFromToken(); // user_id를 토큰에서 추출
     if (!userId || !newComment.trim()) {
-      console.log('UserId is undefined or comment is empty');
+      console.log('UserId가 정의되지 않았거나 댓글이 비어 있습니다.');
       return;
     }
 
@@ -49,11 +49,10 @@ function useCommentSubmit(postId: string) {
         // 요청이 성공적이라면, 상태를 업데이트합니다.
         setNewComment(''); // 입력 필드 초기화
       } else {
-        // 서버 응답이 성공적이지 않은 경우 오류 처리
-        throw new Error('Failed to post comment');
+        throw new Error('댓글을 게시하는 데 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error posting new comment:', error);
+      console.error('새 댓글 게시 중 오류 발생:', error);
     }
   };
 
