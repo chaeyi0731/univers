@@ -166,7 +166,7 @@ io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     const query = 'INSERT INTO chatMessage (username, message, timestamp, user_id) VALUES (?, ?, NOW(), ?)';
     // 메시지 저장
-    db.query(query, [msg.username, msg.text, socket.user_id], (err, result) => {
+    db.query(query, [msg.username, msg.message, socket.user_id], (err, result) => {
       if (err) {
         console.error('Error saving message:', err);
         return;
