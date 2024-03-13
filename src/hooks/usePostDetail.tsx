@@ -22,7 +22,7 @@ function usePostDestail(postId: string) {
         if (error instanceof Error) {
           console.error(error.message);
         } else {
-          console.error('An unexpected error occurred');
+          console.error('예상치 못한 에러가 발생했습니다');
         }
       } finally {
         setLoading(false);
