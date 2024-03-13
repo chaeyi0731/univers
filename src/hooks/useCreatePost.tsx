@@ -28,7 +28,7 @@ const useCreatePost = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP 요청 실패: ${response.status}`);
       }
       // 성공적으로 게시글이 생성되면, 예를 들어 게시글 목록 페이지로 리다이렉트
       navigate('/post');
