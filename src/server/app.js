@@ -42,10 +42,10 @@ const db = mysql.createConnection({
 //? db 연결
 db.connect((err) => {
   if (err) {
-    console.error('Database connection error:', err);
+    console.error('데이터베이스 연결 오류:', err);
     return;
   }
-  console.log('Connected to the database.');
+  console.log('데이터베이스 연결 완료');
 });
 
 //? 회원가입 API
@@ -61,14 +61,14 @@ app.post('/signup', async (req, res) => {
     db.query(query, [username, hashedPassword, name, phoneNumber, address, email], (err, result) => {
       if (err) {
         console.error(err);
-        res.status(500).send('Error during signup');
+        res.status(500).send('가입 중 오류 발생');
         return;
       }
-      res.status(201).send('User registered successfully');
+      res.status(201).send('사용자 등록 완료 ');
     });
   } catch (error) {
-    console.error('Error hashing password', error);
-    res.status(500).send('Error during signup');
+    console.error('비밀번호 해싱 오류', error);
+    res.status(500).send('가입시 오류 발생');
   }
 });
 
@@ -136,7 +136,7 @@ app.get('/api/verifyToken', authenticateToken, (req, res) => {
 
 //? logout API
 app.post('/api/logout', (req, res) => {
-  res.send({ success: true, message: 'Successfully logged out' });
+  res.send({ success: true, message: '로그아웃 되었습니다.' });
 });
 
 //? 채팅관련 API
@@ -154,7 +154,7 @@ io.use((socket, next) => {
   const token = socket.handshake.query.token; // 클라이언트에서 전달받은 토큰
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next(new Error('Authentication error'));
+      return next(new Error('인증오류'));
     }
     socket.user_id = decoded.user_id; // socket 객체에 user_id 저장
     next();
@@ -168,12 +168,12 @@ io.on('connection', (socket) => {
     // 메시지 저장
     db.query(query, [msg.username, msg.message, socket.user_id], (err, result) => {
       if (err) {
-        console.error('Error saving message:', err);
+        console.error('메세지 저장중 오류:', err);
         return;
       }
 
       const messageId = result.insertId; // 삽입된 메시지의 ID
-      console.log('Message saved with ID:', messageId);
+      console.log('메시지 ID로 저장됨::', messageId);
 
       // 삽입된 메시지의 ID를 클라이언트로 전송
       io.emit('chat message', { ...msg, chat_id: messageId });
@@ -186,8 +186,8 @@ app.get('/api/messages', (req, res) => {
   const query = 'SELECT * FROM chatMessage ORDER BY timestamp DESC LIMIT 50';
   db.query(query, (err, results) => {
     if (err) {
-      console.error('Error fetching messages:', err);
-      res.status(500).send('Internal Server Error');
+      console.error('메세지를 불러오지 못하였습니다.:', err);
+      res.status(500).send('서버 내부 오류');
       return;
     }
     res.json(results);
@@ -215,12 +215,12 @@ app.post('/create-post', authenticateToken, upload.single('image'), (req, res) =
       },
       (error, data) => {
         if (error) {
-          console.error('Error uploading image to S3:', error);
-          res.status(500).send('Failed to upload image to S3');
+          console.error('S3에 이미지 업로드 중 오류:', error);
+          res.status(500).send('S3에 이미지를 업로드하는데 실패했습니다');
           return;
         }
         imageUrl = data.Location;
-        insertPost(title, content, imageUrl, user_id, res); // 게시글 삽입 함수 호출
+        insertPost(title, content, imageUrl, user_id, res);
       }
     );
   } else {
@@ -277,13 +277,13 @@ app.get('/posts/:postId', (req, res) => {
   db.query(query, [postId], (error, results) => {
     if (error) {
       console.error('Error fetching post details:', error);
-      res.status(500).send('Server error');
+      res.status(500).send('서버오류');
     } else if (results.length > 0) {
       const post = results[0];
       post.image_url = post.image_url || null; // 이미지 URL이 없는 경우 null 처리
       res.json(post);
     } else {
-      res.status(404).send('Post not found');
+      res.status(404).send('게시글 오류');
     }
   });
 });
@@ -312,7 +312,7 @@ app.get('/comments', (req, res) => {
     if (error) {
       // 쿼리 실행 중 에러가 발생한 경우, 에러 메시지를 보냅니다.
       console.error('댓글을 남기지 못했습니다.:', error);
-      return res.status(500).send('Server error');
+      return res.status(500).send('서ㅂ버오류');
     }
 
     // 쿼리 결과를 클라이언트에게 JSON 형식으로 보냅니다.
@@ -332,7 +332,7 @@ app.post('/comments', (req, res) => {
   db.query(insertQuery, [post_id, user_id, content], (error, result) => {
     if (error) {
       console.error('Error posting new comment:', error);
-      return res.status(500).send('Server error');
+      return res.status(500).send('서버오류');
     }
 
     const commentId = result.insertId;
@@ -345,7 +345,7 @@ app.post('/comments', (req, res) => {
     db.query(selectQuery, [commentId], (error, comments) => {
       if (error) {
         console.error('Error fetching new comment:', error);
-        return res.status(500).send('Server error');
+        return res.status(500).send('서버오류');
       }
 
       res.json(comments[0]);
